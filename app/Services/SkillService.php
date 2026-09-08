@@ -12,7 +12,8 @@ class SkillService
     {
         return SkillCategory::with([
             'skills' => function ($query) {
-                $query->withCount(['projects', 'experiences', 'certificates'])
+                $query->with(['category', 'projects', 'experiences.organization', 'certificates', 'achievements'])
+                    ->withCount(['projects', 'experiences', 'certificates'])
                     ->ordered();
             },
         ])->ordered()->get();
@@ -20,7 +21,7 @@ class SkillService
 
     public function getFeaturedSkills(): Collection
     {
-        return Skill::with('category')
+        return Skill::with(['category', 'projects', 'experiences.organization', 'certificates', 'achievements'])
             ->withCount(['projects', 'experiences', 'certificates'])
             ->featured()
             ->ordered()

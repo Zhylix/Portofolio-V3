@@ -22,8 +22,8 @@ class HomepageTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Helmy Yunan Nasution');
-        $response->assertSee('Featured Projects');
-        $response->assertSee('Professional Journey');
+        $response->assertSee('FEATURED PROJECTS');
+        $response->assertSee('MY JOURNEY');
     }
 
     public function test_all_placeholder_pages_return_successful_response(): void

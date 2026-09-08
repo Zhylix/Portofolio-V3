@@ -1,47 +1,59 @@
-<x-layouts.app :title="$article->title . ' — Helmy Yunan Nasution'">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
-        <a href="{{ route('articles.index') }}" class="inline-flex items-center text-xs font-semibold text-zinc-400 hover:text-white transition">
-            &larr; Back to all articles
-        </a>
+<x-layouts.app :title="$article->title">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a 
+                href="{{ route('articles.index') }}" 
+                class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#9E958B] hover:text-[#E47A2E] transition-colors"
+            >
+                <span>&larr;</span>
+                <span>Back to All Articles</span>
+            </a>
+        </div>
 
-        <header class="space-y-4">
-            <div class="flex items-center gap-3 text-xs text-zinc-400">
-                @if($article->category)
-                    <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium">{{ $article->category }}</span>
-                @endif
-                <time>{{ $article->published_at?->format('F d, Y') }}</time>
-            </div>
-
-            <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
-                {{ $article->title }}
-            </h1>
-
-            @if($article->excerpt)
-                <p class="text-lg text-zinc-400 leading-relaxed border-l-2 border-indigo-500 pl-4 italic">
-                    {{ $article->excerpt }}
-                </p>
-            @endif
-        </header>
-
-        <article class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6 pt-6 border-t border-zinc-900 text-base">
-            {!! nl2br(e($article->content)) !!}
-        </article>
-
-        <!-- Connected Skills/Projects -->
-        @if($article->skills->isNotEmpty() || $article->projects->isNotEmpty())
-            <div class="pt-8 border-t border-zinc-900 space-y-4 text-xs">
-                <span class="text-zinc-500 uppercase font-semibold tracking-wider">Related Context:</span>
-                <div class="flex flex-wrap gap-2">
-                    @foreach($article->skills as $skill)
-                        <span class="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300">{{ $skill->name }}</span>
-                    @endforeach
-                    @foreach($article->projects as $proj)
-                        <a href="{{ route('projects.show', $proj->slug) }}" class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-400 hover:underline">
-                            Project: {{ $proj->title }}
-                        </a>
-                    @endforeach
+        <article class="space-y-8">
+            <!-- Article Header -->
+            <header class="space-y-4 pb-8 border-b border-[#2A2520]">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wider bg-[#1E1A17] text-[#E47A2E] border border-[#2A2520]">
+                        {{ $article->category }}
+                    </span>
+                    <span class="text-xs font-mono text-[#70685F]">
+                        {{ $article->published_at ? $article->published_at->format('F d, Y') : 'Draft' }}
+                    </span>
                 </div>
+
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-[#F5F1EA] tracking-tight leading-tight">
+                    {{ $article->title }}
+                </h1>
+
+                @if($article->excerpt)
+                    <p class="text-lg text-[#9E958B] font-sans leading-relaxed">
+                        {{ $article->excerpt }}
+                    </p>
+                @endif
+            </header>
+
+            <!-- Article Content -->
+            <div class="prose prose-invert max-w-none text-[#F5F1EA] leading-relaxed text-base sm:text-lg font-sans space-y-6">
+                {!! nl2br(e($article->content)) !!}
             </div>
-        @endif
+
+            <!-- Author Card -->
+            <footer class="mt-16 pt-8 border-t border-[#2A2520]">
+                <div class="p-6 sm:p-8 rounded-3xl bg-[#151311] border border-[#2A2520] flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
+                    <div class="w-16 h-16 rounded-full bg-[#1E1A17] border border-[#2A2520] flex items-center justify-center text-xl font-mono font-bold text-[#E47A2E] shrink-0">
+                        HY
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-xs font-mono uppercase tracking-widest text-[#E47A2E]">Author</span>
+                        <h4 class="text-xl font-heading font-bold text-[#F5F1EA]">Helmy Yunan Nasution</h4>
+                        <p class="text-sm text-[#9E958B] leading-relaxed">
+                            Software Engineer & System Architect specializing in distributed systems, Laravel architectures, and database performance.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </article>
     </div>
 </x-layouts.app>

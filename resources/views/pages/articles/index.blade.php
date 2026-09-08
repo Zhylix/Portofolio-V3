@@ -1,42 +1,55 @@
-<x-layouts.app title="Articles & Insights — Helmy Yunan Nasution">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-        <header class="space-y-3">
-            <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Articles & Engineering Insights</h1>
-            <p class="text-zinc-400 text-base leading-relaxed">
-                Reflections and deep dives on software architecture, backend engineering, performance tuning, and system design.
-            </p>
-        </header>
+<x-layouts.app title="Articles & Publications">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Header -->
+        <x-section-heading 
+            label="// TECHNICAL ESSAYS"
+            title="Articles & Publications"
+            description="In-depth technical guides, architectural design analyses, and engineering observations."
+        />
 
-        <div class="space-y-8">
+        <!-- Articles List -->
+        <div class="space-y-6">
             @forelse($articles as $article)
-                <article class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 transition space-y-3">
-                    <div class="flex items-center gap-3 text-xs text-zinc-500">
-                        @if($article->category)
-                            <span class="text-indigo-400 font-semibold">{{ $article->category }}</span>
-                            <span>•</span>
-                        @endif
-                        <time datetime="{{ $article->published_at?->toIso8601String() }}">
-                            {{ $article->published_at?->format('F d, Y') }}
-                        </time>
+                <article class="p-6 sm:p-8 rounded-2xl bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/50 transition-all duration-300 flex flex-col justify-between group hover:shadow-xl hover:shadow-[#C45A19]/5">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono uppercase tracking-wider bg-[#1E1A17] text-[#E47A2E] border border-[#2A2520]">
+                                {{ $article->category }}
+                            </span>
+                            <span class="text-xs font-mono text-[#70685F]">
+                                {{ $article->published_at ? $article->published_at->format('F d, Y') : 'Draft' }}
+                            </span>
+                        </div>
+
+                        <h2 class="text-2xl font-heading font-bold text-[#F5F1EA] group-hover:text-[#E47A2E] transition-colors leading-snug">
+                            <a href="{{ route('articles.show', $article->slug) }}">
+                                {{ $article->title }}
+                            </a>
+                        </h2>
+
+                        <p class="text-sm text-[#9E958B] leading-relaxed">
+                            {{ $article->excerpt }}
+                        </p>
                     </div>
 
-                    <h2 class="text-2xl font-bold text-white hover:text-indigo-400 transition">
-                        <a href="{{ route('articles.show', $article->slug) }}">{{ $article->title }}</a>
-                    </h2>
-
-                    <p class="text-zinc-400 text-sm leading-relaxed line-clamp-3">
-                        {{ $article->excerpt ?? Str::limit(strip_tags($article->content), 200) }}
-                    </p>
-
-                    <div class="pt-2">
-                        <a href="{{ route('articles.show', $article->slug) }}" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300">
-                            Read Article &rarr;
+                    <div class="mt-6 pt-4 border-t border-[#2A2520] flex items-center justify-between text-xs font-mono">
+                        <span class="text-[#70685F]">By Helmy Yunan Nasution</span>
+                        <a 
+                            href="{{ route('articles.show', $article->slug) }}" 
+                            class="text-[#E47A2E] group-hover:text-[#F5F1EA] inline-flex items-center gap-1 transition"
+                        >
+                            <span>Read Article</span>
+                            <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </a>
                     </div>
                 </article>
             @empty
-                <p class="text-sm text-zinc-500">No published articles yet.</p>
+                <div class="text-center py-16 border border-dashed border-[#2A2520] rounded-3xl p-8">
+                    <p class="text-[#70685F] font-mono">No articles currently published in database.</p>
+                </div>
             @endforelse
         </div>
+
     </div>
 </x-layouts.app>

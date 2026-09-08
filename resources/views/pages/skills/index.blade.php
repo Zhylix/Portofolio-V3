@@ -1,56 +1,39 @@
-<x-layouts.app title="Skills Matrix & Evidence — Helmy Yunan Nasution">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-        <header class="max-w-3xl space-y-3">
-            <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Skills & Evidence Matrix</h1>
-            <p class="text-zinc-400 text-base leading-relaxed">
-                Rather than arbitrary percentages, competencies here are demonstrated through empirical evidence: shipped production projects, professional experiences, and verified industry credentials.
-            </p>
-        </header>
+<x-layouts.app title="Capabilities & Empirical Skills">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        
+        <!-- Header -->
+        <x-section-heading 
+            label="// TECHNICAL CAPABILITIES"
+            title="Skills & Empirical Evidence"
+            description="Competencies grouped by technical domain. Click any card to inspect associated production systems, case studies, and verified credentials."
+        />
 
-        <div class="space-y-12">
-            @forelse($categories as $category)
+        <!-- Categorized Skills Sections -->
+        @forelse($categories as $category)
+            @if($category->skills->isNotEmpty())
                 <section class="space-y-6">
-                    <div class="border-b border-zinc-900 pb-3 flex items-center justify-between">
-                        <div>
-                            <h2 class="text-xl font-bold text-white">{{ $category->name }}</h2>
-                            @if($category->description)
-                                <p class="text-xs text-zinc-500 mt-0.5">{{ $category->description }}</p>
-                            @endif
-                        </div>
-                        <span class="text-xs text-zinc-500 font-mono">{{ $category->skills->count() }} skills</span>
+                    <div class="flex items-center gap-3 pb-3 border-b border-[#2A2520]">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#C45A19]"></span>
+                        <h2 class="text-xl font-heading font-bold text-[#F5F1EA]">
+                            {{ $category->name }}
+                        </h2>
+                        <span class="text-xs font-mono text-[#70685F]">
+                            ({{ $category->skills->count() }} {{ Str::plural('Skill', $category->skills->count()) }})
+                        </span>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         @foreach($category->skills as $skill)
-                            <div class="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 transition space-y-3">
-                                <div class="flex items-center justify-between">
-                                    <h3 class="font-bold text-white text-base">{{ $skill->name }}</h3>
-                                    @if($skill->featured)
-                                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Featured</span>
-                                    @endif
-                                </div>
-
-                                @if($skill->description)
-                                    <p class="text-xs text-zinc-400 leading-relaxed">{{ $skill->description }}</p>
-                                @endif
-
-                                <div class="pt-2 border-t border-zinc-800/60 flex items-center justify-between text-xs text-zinc-500 font-mono">
-                                    <span>Evidence base:</span>
-                                    <div class="flex items-center gap-2 text-zinc-300">
-                                        <span title="Projects">{{ $skill->projects_count }} proj</span>
-                                        <span>•</span>
-                                        <span title="Experiences">{{ $skill->experiences_count }} exp</span>
-                                        <span>•</span>
-                                        <span title="Certificates">{{ $skill->certificates_count }} cert</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <x-skill-card :skill="$skill" />
                         @endforeach
                     </div>
                 </section>
-            @empty
-                <p class="text-sm text-zinc-500">No skill categories found.</p>
-            @endforelse
-        </div>
+            @endif
+        @empty
+            <div class="text-center py-16 border border-dashed border-[#2A2520] rounded-3xl p-8">
+                <p class="text-[#70685F] font-mono">No skills currently available in database.</p>
+            </div>
+        @endforelse
+
     </div>
 </x-layouts.app>

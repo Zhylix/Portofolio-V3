@@ -24,4 +24,24 @@ class Profile extends Model implements HasMedia
         'hero_label',
         'hero_description',
     ];
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->name ?? 'Helmy Yunan Nasution';
+    }
+
+    public function getIsAvailableAttribute(): bool
+    {
+        return ! empty($this->availability);
+    }
+
+    public function getAvailabilityStatusAttribute(): ?string
+    {
+        return $this->availability ?? 'Available for Collaboration';
+    }
+
+    public function getBioAttribute(): ?string
+    {
+        return $this->short_bio ?? $this->long_bio;
+    }
 }

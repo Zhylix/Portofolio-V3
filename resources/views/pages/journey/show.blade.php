@@ -1,110 +1,148 @@
-<x-layouts.app :title="$experience->title . ' — Experience Details'">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-        <a href="{{ route('journey.index') }}" class="inline-flex items-center text-xs font-semibold text-zinc-400 hover:text-white transition">
-            &larr; Back to Journey Timeline
-        </a>
-
-        <header class="space-y-4">
-            <div class="flex items-center gap-2 text-xs">
-                <span class="px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 font-medium">
-                    {{ $experience->experienceType?->name }}
-                </span>
-                @if($experience->organization)
-                    <span class="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 font-medium">
-                        {{ $experience->organization->name }}
-                    </span>
-                @endif
-                <span class="px-2.5 py-1 rounded-md bg-zinc-900 text-zinc-400 font-mono">
-                    {{ $experience->location ?? 'Remote' }}
-                </span>
-            </div>
-
-            <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight">
-                {{ $experience->title }}
-            </h1>
-
-            <div class="text-lg text-indigo-400 font-medium">
-                {{ $experience->role }}
-            </div>
-
-            <div class="text-xs font-mono text-zinc-500">
-                {{ $experience->started_at?->format('F Y') }} — 
-                {{ $experience->is_current ? 'Present' : ($experience->ended_at?->format('F Y') ?? 'Present') }}
-            </div>
-        </header>
-
-        <div class="space-y-10 border-t border-zinc-900 pt-8 text-zinc-300 leading-relaxed">
-            <section class="space-y-3">
-                <h2 class="text-xl font-bold text-white">Summary</h2>
-                <p class="text-base text-zinc-300">{{ $experience->summary }}</p>
-            </section>
-
-            @if($experience->description)
-                <section class="space-y-3">
-                    <h2 class="text-xl font-bold text-white">Full Narrative</h2>
-                    <div class="text-sm sm:text-base whitespace-pre-line text-zinc-300 leading-relaxed">{{ $experience->description }}</div>
-                </section>
-            @endif
-
-            <!-- Challenge & Solution -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @if($experience->challenge)
-                    <div class="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 space-y-2">
-                        <h3 class="font-bold text-amber-400 text-base">Key Challenge</h3>
-                        <p class="text-sm text-zinc-300">{{ $experience->challenge }}</p>
-                    </div>
-                @endif
-
-                @if($experience->solution)
-                    <div class="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 space-y-2">
-                        <h3 class="font-bold text-emerald-400 text-base">Applied Solution</h3>
-                        <p class="text-sm text-zinc-300">{{ $experience->solution }}</p>
-                    </div>
-                @endif
-            </div>
-
-            @if($experience->contribution)
-                <section class="space-y-2 p-5 rounded-2xl bg-indigo-500/5 border border-indigo-500/20">
-                    <h3 class="font-bold text-indigo-400 text-base">Core Contribution</h3>
-                    <p class="text-sm text-zinc-300">{{ $experience->contribution }}</p>
-                </section>
-            @endif
-
-            @if($experience->outcome)
-                <section class="space-y-2 p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800">
-                    <h3 class="font-bold text-white text-base">Measurable Outcome</h3>
-                    <p class="text-sm text-zinc-300">{{ $experience->outcome }}</p>
-                </section>
-            @endif
-
-            <!-- Connected Projects -->
-            @if($experience->projects->isNotEmpty())
-                <section class="space-y-3 pt-6 border-t border-zinc-900">
-                    <h2 class="text-xl font-bold text-white">Associated Projects</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        @foreach($experience->projects as $proj)
-                            <a href="{{ route('projects.show', $proj->slug) }}" class="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800 hover:border-zinc-700 transition block">
-                                <div class="font-bold text-white text-sm">{{ $proj->title }}</div>
-                                <div class="text-xs text-zinc-400 mt-1 line-clamp-2">{{ $proj->short_description }}</div>
-                            </a>
-                        @endforeach
-                    </div>
-                </section>
-            @endif
-
-            <!-- Associated Skills -->
-            @if($experience->skills->isNotEmpty())
-                <section class="space-y-3 pt-6 border-t border-zinc-900">
-                    <h2 class="text-xl font-bold text-white">Skills Applied</h2>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($experience->skills as $skill)
-                            <span class="px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-300">
-                                {{ $skill->name }}
-                            </span>
-                        @endforeach
-                    </div>
-                </section>
-            @endif
+<x-layouts.app :title="$experience->title . ' — Journey Case Study'">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a 
+                href="{{ route('journey.index') }}" 
+                class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#9E958B] hover:text-[#E47A2E] transition-colors"
+            >
+                <span>&larr;</span>
+                <span>Back to Journey Timeline</span>
+            </a>
         </div>
+
+        <!-- Experience Mini Case Study Header -->
+        <article class="space-y-12">
+            <header class="p-8 sm:p-12 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-6">
+                <div class="flex flex-wrap items-center gap-3">
+                    @if($experience->experienceType)
+                        <span class="px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wider bg-[#1E1A17] text-[#E47A2E] border border-[#2A2520]">
+                            {{ $experience->experienceType->name }}
+                        </span>
+                    @endif
+
+                    @if($experience->is_current)
+                        <span class="px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wider bg-emerald-950/50 text-emerald-400 border border-emerald-800/40">
+                            Active Position
+                        </span>
+                    @endif
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl font-heading font-extrabold text-[#F5F1EA] tracking-tight leading-tight">
+                    {{ $experience->title }}
+                </h1>
+
+                <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-sm font-mono text-[#9E958B]">
+                    <span class="text-[#F5F1EA] font-semibold">{{ $experience->role }}</span>
+                    @if($experience->organization)
+                        <span>&bull; {{ $experience->organization->name }}</span>
+                    @endif
+                    @if($experience->location)
+                        <span>&bull; {{ $experience->location }}</span>
+                    @endif
+                </div>
+
+                <!-- Date Range -->
+                <div class="text-xs font-mono text-[#E47A2E] pt-2">
+                    {{ $experience->started_at ? $experience->started_at->format('F Y') : 'Start' }} — 
+                    {{ $experience->is_current ? 'Present' : ($experience->ended_at ? $experience->ended_at->format('F Y') : 'Ongoing') }}
+                </div>
+
+                <p class="text-base sm:text-lg text-[#F5F1EA] leading-relaxed pt-2 border-t border-[#2A2520]">
+                    {{ $experience->summary }}
+                </p>
+            </header>
+
+            <!-- Contributions & Impact -->
+            @if($experience->contribution)
+                <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-3">
+                    <h3 class="text-xs font-mono uppercase tracking-widest text-[#E47A2E]">Primary Contribution</h3>
+                    <h4 class="text-xl font-heading font-bold text-[#F5F1EA]">What Was Built & Delivered</h4>
+                    <p class="text-sm text-[#9E958B] leading-relaxed">
+                        {{ $experience->contribution }}
+                    </p>
+                </div>
+            @endif
+
+            <!-- Challenge & Solution Grid -->
+            @if($experience->challenge || $experience->solution)
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    @if($experience->challenge)
+                        <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-3">
+                            <h3 class="text-xs font-mono uppercase tracking-widest text-[#E47A2E]">The Challenge</h3>
+                            <h4 class="text-lg font-heading font-bold text-[#F5F1EA]">Technical Hurdles</h4>
+                            <p class="text-sm text-[#9E958B] leading-relaxed">
+                                {{ $experience->challenge }}
+                            </p>
+                        </div>
+                    @endif
+
+                    @if($experience->solution)
+                        <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-3">
+                            <h3 class="text-xs font-mono uppercase tracking-widest text-emerald-400">The Solution</h3>
+                            <h4 class="text-lg font-heading font-bold text-[#F5F1EA]">Strategy & Implementation</h4>
+                            <p class="text-sm text-[#9E958B] leading-relaxed">
+                                {{ $experience->solution }}
+                            </p>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            <!-- Outcome -->
+            @if($experience->outcome)
+                <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-3">
+                    <h3 class="text-xs font-mono uppercase tracking-widest text-emerald-400">Measurable Outcome</h3>
+                    <h4 class="text-xl font-heading font-bold text-[#F5F1EA]">Results & Production Impact</h4>
+                    <p class="text-sm text-[#9E958B] leading-relaxed">
+                        {{ $experience->outcome }}
+                    </p>
+                </div>
+            @endif
+
+            <!-- Full Narrative Description -->
+            @if($experience->description)
+                <div class="p-8 sm:p-10 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-4">
+                    <h3 class="text-2xl font-heading font-bold text-[#F5F1EA]">Detailed Narrative</h3>
+                    <div class="prose prose-invert max-w-none text-[#9E958B] leading-relaxed font-sans space-y-3">
+                        {!! nl2br(e($experience->description)) !!}
+                    </div>
+                </div>
+            @endif
+
+            <!-- Related Artifacts (Skills, Projects, Achievements, Certificates) -->
+            <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-6">
+                <h3 class="text-xl font-heading font-bold text-[#F5F1EA]">Associated Systems & Evidence</h3>
+
+                <!-- Skills -->
+                @if($experience->skills->isNotEmpty())
+                    <div>
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Applied Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($experience->skills as $skill)
+                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-[#1E1A17] text-[#F5F1EA] border border-[#2A2520]">
+                                    {{ $skill->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Projects -->
+                @if($experience->projects->isNotEmpty())
+                    <div class="pt-4 border-t border-[#2A2520]">
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Related Projects Built</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($experience->projects as $proj)
+                                <a href="{{ route('projects.show', $proj->slug) }}" class="p-3 rounded-xl bg-[#0E0D0C] border border-[#2A2520] hover:border-[#C45A19] transition block">
+                                    <span class="text-sm font-semibold text-[#F5F1EA] block">{{ $proj->title }}</span>
+                                    <span class="text-xs text-[#9E958B] line-clamp-1">{{ $proj->short_description }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </article>
     </div>
 </x-layouts.app>

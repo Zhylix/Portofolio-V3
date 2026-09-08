@@ -33,6 +33,13 @@
 </head>
 <body class="bg-[#080808] text-[#F5F1EA] font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[#C45A19] selection:text-[#F5F1EA]">
 
+    <!-- Top Scroll Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-0.5 sm:h-1 bg-gradient-to-r from-[#C45A19] to-[#E47A2E] z-50 w-0 pointer-events-none transition-[width] duration-75 shadow-sm shadow-[#C45A19]/50" aria-hidden="true"></div>
+
+    <!-- Desktop Custom Cursor -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"><span id="cursor-label"></span></div>
+
     <!-- Subtle Ambient Radial Glows -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <!-- Top radial glow (burnt orange) -->
@@ -52,6 +59,9 @@
     <main class="flex-grow z-10 pt-28 pb-20">
         {{ $slot }}
     </main>
+
+    <!-- Global Command Palette -->
+    <x-command-palette />
 
     <!-- Footer -->
     <x-footer />

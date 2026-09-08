@@ -6,9 +6,9 @@
     $imageUrl = $project->getFirstMediaUrl('featured_image') ?: $project->getFirstMediaUrl();
 @endphp
 
-<article class="group relative flex flex-col bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#C45A19]/10">
+<article data-cursor="view" class="group relative flex flex-col bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#C45A19]/10">
     <!-- Project Media / Thumbnail with zoom -->
-    <div class="relative h-48 sm:h-56 w-full overflow-hidden bg-[#0E0D0C] border-b border-[#2A2520]">
+    <div data-cursor="view" class="relative h-48 sm:h-56 w-full overflow-hidden bg-[#0E0D0C] border-b border-[#2A2520]">
         @if($imageUrl)
             <img 
                 src="{{ $imageUrl }}" 

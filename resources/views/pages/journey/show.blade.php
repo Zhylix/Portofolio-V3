@@ -111,7 +111,7 @@
             @endif
 
             <!-- Related Artifacts (Skills, Projects, Achievements, Certificates) -->
-            <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-6">
+            <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-6 reveal-on-scroll">
                 <h3 class="text-xl font-heading font-bold text-[#F5F1EA]">Associated Systems & Evidence</h3>
 
                 <!-- Skills -->
@@ -120,9 +120,12 @@
                         <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Applied Skills</h4>
                         <div class="flex flex-wrap gap-2">
                             @foreach($experience->skills as $skill)
-                                <span class="px-3 py-1 rounded-full text-xs font-mono bg-[#1E1A17] text-[#F5F1EA] border border-[#2A2520]">
+                                <a 
+                                    href="{{ route('skills.index') }}" 
+                                    class="px-3 py-1 rounded-full text-xs font-mono bg-[#1E1A17] text-[#F5F1EA] border border-[#2A2520] hover:border-[#C45A19] hover:text-[#E47A2E] transition"
+                                >
                                     {{ $skill->name }}
-                                </span>
+                                </a>
                             @endforeach
                         </div>
                     </div>
@@ -134,9 +137,64 @@
                         <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Related Projects Built</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($experience->projects as $proj)
-                                <a href="{{ route('projects.show', $proj->slug) }}" class="p-3 rounded-xl bg-[#0E0D0C] border border-[#2A2520] hover:border-[#C45A19] transition block">
-                                    <span class="text-sm font-semibold text-[#F5F1EA] block">{{ $proj->title }}</span>
-                                    <span class="text-xs text-[#9E958B] line-clamp-1">{{ $proj->short_description }}</span>
+                                <a 
+                                    href="{{ route('projects.show', $proj->slug) }}" 
+                                    data-cursor="view"
+                                    class="p-4 rounded-2xl bg-[#0E0D0C] border border-[#2A2520] hover:border-[#C45A19] transition block group"
+                                >
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm font-semibold text-[#F5F1EA] group-hover:text-[#E47A2E] transition-colors">{{ $proj->title }}</span>
+                                        <span class="text-xs font-mono text-[#E47A2E]">&rarr;</span>
+                                    </div>
+                                    <span class="text-xs text-[#9E958B] line-clamp-2">{{ $proj->short_description }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Certificates -->
+                @if($experience->certificates->isNotEmpty())
+                    <div class="pt-4 border-t border-[#2A2520]">
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Verified Certificates</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($experience->certificates as $cert)
+                                <a 
+                                    href="{{ $cert->credential_url ?? route('certificates.index') }}" 
+                                    target="{{ $cert->credential_url ? '_blank' : '_self' }}"
+                                    data-cursor="explore"
+                                    class="p-4 rounded-2xl bg-[#0E0D0C] border border-[#2A2520] hover:border-[#C45A19] transition block group"
+                                >
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm font-semibold text-[#F5F1EA] group-hover:text-[#E47A2E] transition-colors">{{ $cert->title }}</span>
+                                        <span class="text-xs font-mono text-[#70685F]">{{ $cert->issuer }}</span>
+                                    </div>
+                                    @if($cert->credential_id)
+                                        <span class="text-[10px] font-mono text-[#70685F] block">ID: {{ $cert->credential_id }}</span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Achievements -->
+                @if($experience->achievements->isNotEmpty())
+                    <div class="pt-4 border-t border-[#2A2520]">
+                        <h4 class="text-xs font-mono uppercase tracking-wider text-[#70685F] mb-3">Distinctions & Honors</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($experience->achievements as $ach)
+                                <a 
+                                    href="{{ $ach->url ?? route('achievements.index') }}" 
+                                    target="{{ $ach->url ? '_blank' : '_self' }}"
+                                    data-cursor="explore"
+                                    class="p-4 rounded-2xl bg-[#0E0D0C] border border-[#2A2520] hover:border-[#C45A19] transition block group"
+                                >
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm font-semibold text-[#F5F1EA] group-hover:text-[#E47A2E] transition-colors">{{ $ach->title }}</span>
+                                        <span class="text-xs font-mono text-[#E47A2E]">{{ $ach->rank ?? 'Awarded' }}</span>
+                                    </div>
+                                    <span class="text-xs text-[#9E958B] line-clamp-1">{{ $ach->organization }}</span>
                                 </a>
                             @endforeach
                         </div>

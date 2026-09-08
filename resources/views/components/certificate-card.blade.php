@@ -9,7 +9,7 @@
 @endphp
 
 <div x-data class="relative">
-    <div class="p-6 rounded-2xl bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/50 transition-all duration-300 flex flex-col justify-between h-full group hover:shadow-xl hover:shadow-[#C45A19]/5">
+    <div data-cursor="explore" class="p-6 rounded-2xl bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/50 transition-all duration-300 flex flex-col justify-between h-full group hover:shadow-xl hover:shadow-[#C45A19]/5">
         <div class="space-y-4">
             <!-- Header with Issuer Badge -->
             <div class="flex items-start justify-between gap-3">

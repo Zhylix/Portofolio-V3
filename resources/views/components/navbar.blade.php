@@ -72,37 +72,55 @@
                 </a>
             </div>
 
-            <!-- Right: Contact Pill with Availability Status Indicator -->
-            <div class="hidden sm:flex items-center gap-3">
-                <a 
-                    href="{{ route('contact.index') }}" 
-                    class="relative group flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#151311] hover:bg-[#1E1A17] border border-[#2A2520] hover:border-[#C45A19] transition-all duration-200 text-xs font-mono uppercase tracking-wider text-[#F5F1EA]"
-                >
-                    <span>Contact</span>
-                    @if($isAvailable)
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E47A2E] opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C45A19]"></span>
-                        </span>
-                    @else
-                        <span class="inline-flex rounded-full h-2 w-2 bg-[#9E958B]"></span>
-                    @endif
-                </a>
-            </div>
-
-            <!-- Mobile Hamburger Button -->
-            <div class="md:hidden flex items-center">
+            <!-- Right: Command Palette & Contact Pill -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Command Palette Shortcut Button (Desktop & Mobile) -->
                 <button 
-                    @click="mobileOpen = !mobileOpen" 
-                    type="button" 
-                    class="p-2 rounded-full text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311] border border-transparent focus:outline-none focus:border-[#C45A19] transition"
-                    aria-label="Toggle Navigation Menu"
+                    @click="$dispatch('open-command-palette')" 
+                    type="button"
+                    class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-[#151311] hover:bg-[#1E1A17] border border-[#2A2520] hover:border-[#C45A19] text-xs font-mono text-[#9E958B] hover:text-[#F5F1EA] transition shadow-sm"
+                    aria-label="Search and Commands"
+                    title="Command Palette (Ctrl + K)"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        <path x-show="mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
+                    <span class="hidden lg:inline text-[11px] text-[#70685F]">Search</span>
+                    <kbd class="hidden sm:inline text-[9px] font-mono text-[#70685F] bg-[#0E0D0C] px-1.5 py-0.5 rounded border border-[#2A2520]">⌘K</kbd>
                 </button>
+
+                <!-- Contact Pill with Availability Status Indicator -->
+                <div class="hidden sm:flex items-center">
+                    <a 
+                        href="{{ route('contact.index') }}" 
+                        class="relative group flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#151311] hover:bg-[#1E1A17] border border-[#2A2520] hover:border-[#C45A19] transition-all duration-200 text-xs font-mono uppercase tracking-wider text-[#F5F1EA]"
+                    >
+                        <span>Contact</span>
+                        @if($isAvailable)
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E47A2E] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C45A19]"></span>
+                            </span>
+                        @else
+                            <span class="inline-flex rounded-full h-2 w-2 bg-[#9E958B]"></span>
+                        @endif
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="md:hidden flex items-center">
+                    <button 
+                        @click="mobileOpen = !mobileOpen" 
+                        type="button" 
+                        class="p-2 rounded-full text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311] border border-transparent focus:outline-none focus:border-[#C45A19] transition"
+                        aria-label="Toggle Navigation Menu"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </nav>
     </div>

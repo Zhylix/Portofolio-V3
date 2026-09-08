@@ -1,8 +1,11 @@
 <x-layouts.app :title="$profile ? $profile->full_name : 'Helmy Yunan Nasution'">
 
     <!-- 1. HERO SECTION -->
-    <section class="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div class="max-w-5xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+    <section id="hero-section" class="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24 overflow-hidden">
+        <!-- Interactive Mouse Follow Radial Glow (Desktop Only) -->
+        <div id="hero-glow-follow" class="absolute w-[450px] h-[450px] rounded-full bg-[radial-gradient(circle,_rgba(196,90,25,0.18)_0%,_transparent_70%)] pointer-events-none -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-0 transition-opacity duration-300 z-0 hidden lg:block" aria-hidden="true"></div>
+
+        <div class="max-w-5xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 relative z-10">
             
             <!-- Left: Hero Text Content -->
             <div class="flex-1 text-center lg:text-left space-y-6">
@@ -103,7 +106,7 @@
     </section>
 
     <!-- 2. ABOUT & INTERACTIVE PHILOSOPHY TABS -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+    <section class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
         <x-section-heading 
             label="// IDENTITY & PHILOSOPHY"
             title="Engineering Through Principles"
@@ -240,7 +243,7 @@
     </section>
 
     <!-- 3. FEATURED PROJECTS SECTION -->
-    <section id="work" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+    <section id="work" class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
             <x-section-heading 
                 label="// FEATURED PROJECTS"
@@ -266,7 +269,7 @@
     </section>
 
     <!-- 4. CAPABILITIES / SKILLS SECTION WITH MODALS -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+    <section class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
             <x-section-heading 
                 label="// CAPABILITIES"
@@ -292,7 +295,7 @@
     </section>
 
     <!-- 5. MY JOURNEY HIGHLIGHTS -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+    <section class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
             <x-section-heading 
                 label="// MY JOURNEY"
@@ -319,7 +322,7 @@
 
     <!-- 6. LATEST ARTICLES -->
     @if($articles->isNotEmpty())
-        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+        <section class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
                 <x-section-heading 
                     label="// WRITINGS"
@@ -360,7 +363,7 @@
     @endif
 
     <!-- 7. CONTACT CALL TO ACTION BANNER -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
+    <section class="reveal-on-scroll max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-[#2A2520]">
         <div class="p-8 sm:p-12 lg:p-16 rounded-3xl bg-gradient-to-br from-[#151311] via-[#0E0D0C] to-[#1E1A17] border border-[#2A2520] shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
             <div class="absolute inset-0 bg-grid-subtle opacity-30 pointer-events-none"></div>
             

@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Filament\Resources\Skills\Tables;
+
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
+
+class SkillsTable
+{
+    public static function configure(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold'),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->badge()
+                    ->sortable(),
+                IconColumn::make('featured')
+                    ->boolean()
+                    ->sortable(),
+                TextColumn::make('projects_count')
+                    ->counts('projects')
+                    ->label('Projects')
+                    ->sortable(),
+                TextColumn::make('experiences_count')
+                    ->counts('experiences')
+                    ->label('Experiences')
+                    ->sortable(),
+                TextColumn::make('certificates_count')
+                    ->counts('certificates')
+                    ->label('Certificates')
+                    ->sortable(),
+                TextColumn::make('sort_order')
+                    ->numeric()
+                    ->sortable(),
+            ])
+            ->filters([
+                SelectFilter::make('skill_category_id')
+                    ->relationship('category', 'name')
+                    ->label('Category'),
+                TernaryFilter::make('featured')
+                    ->label('Featured Only'),
+            ])
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}

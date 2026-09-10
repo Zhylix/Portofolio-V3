@@ -13,13 +13,13 @@
             <div class="lg:col-span-2 space-y-6 text-[#9E958B] leading-relaxed text-base">
                 <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-4">
                     <h3 class="text-2xl font-heading font-bold text-[#F5F1EA]">
-                        {{ $profile->headline ?? 'Software Engineer & System Architect' }}
+                        {{ $profile->headline ?? 'Software Engineer & Web Developer' }}
                     </h3>
                     <p class="font-sans">
-                        {{ $profile->bio ?? 'I design, build, and maintain mission-critical software systems that bridge clean code paradigms with high-availability infrastructure. My background spans relational database optimization, event-driven pipelines, and modular enterprise architectures.' }}
+                        Saya suka building things that are useful, scalable, and visually clean. Fokus utama saya adalah arsitektur web modern, API design, dan performa backend yang solid.
                     </p>
                     <p>
-                        Over years of hands-on engineering, I have led technical teams, designed APIs for multi-tenant fintech and HR platforms, and engineered automated developer toolchains. I advocate for simplicity in code and robustness in architecture.
+                        {{ $profile->bio ?? 'Dengan pengalaman langsung dalam perancangan dan implementasi aplikasi web, saya memprioritaskan kesederhanaan kode, tipe data yang ketat, serta pengujian otomatis agar setiap sistem dapat berjalan dengan andal di lingkungan produksi.' }}
                     </p>
                 </div>
 
@@ -96,12 +96,28 @@
             <div class="space-y-6">
                 <!-- Location & Contact Card -->
                 <div class="p-6 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-4">
-                    <h4 class="text-xs font-mono uppercase tracking-widest text-[#E47A2E]">Specifications</h4>
-                    <dl class="space-y-3 text-xs font-mono">
-                        <div class="flex items-center justify-between pb-2 border-b border-[#2A2520]">
-                            <dt class="text-[#70685F]">Full Name</dt>
-                            <dd class="text-[#F5F1EA] font-semibold">{{ $profile->full_name ?? 'Helmy Yunan Nasution' }}</dd>
+                    <div class="flex items-center gap-4 pb-3 border-b border-[#2A2520]">
+                        <div class="w-14 h-14 rounded-2xl bg-[#0E0D0C] border border-[#2A2520] overflow-hidden flex items-center justify-center shrink-0">
+                            @if($profile && $profile->avatar_url)
+                                <img 
+                                    src="{{ $profile->avatar_url }}" 
+                                    alt="{{ $profile->full_name }}" 
+                                    width="56" 
+                                    height="56" 
+                                    loading="lazy" 
+                                    decoding="async" 
+                                    class="w-full h-full object-cover"
+                                />
+                            @else
+                                <span class="font-mono text-sm font-bold text-[#E47A2E]">HY</span>
+                            @endif
                         </div>
+                        <div>
+                            <h4 class="text-xs font-mono uppercase tracking-widest text-[#E47A2E]">Specifications</h4>
+                            <p class="text-sm font-heading font-bold text-[#F5F1EA]">{{ $profile->full_name ?? 'Helmy Yunan Nasution' }}</p>
+                        </div>
+                    </div>
+                    <dl class="space-y-3 text-xs font-mono">
                         <div class="flex items-center justify-between pb-2 border-b border-[#2A2520]">
                             <dt class="text-[#70685F]">Location</dt>
                             <dd class="text-[#F5F1EA] font-semibold">{{ $profile->location ?? 'Jakarta, Indonesia' }}</dd>
@@ -110,10 +126,23 @@
                             <dt class="text-[#70685F]">Availability</dt>
                             <dd class="text-emerald-400 font-semibold">{{ $profile->availability_status ?? 'Open to Projects' }}</dd>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between {{ ($profile && $profile->resume_url) ? 'pb-2 border-b border-[#2A2520]' : '' }}">
                             <dt class="text-[#70685F]">Specialization</dt>
                             <dd class="text-[#E47A2E] font-semibold">Backend & Architecture</dd>
                         </div>
+                        @if($profile && $profile->resume_url)
+                            <div class="pt-2">
+                                <a 
+                                    href="{{ $profile->resume_url }}" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#1E1A17] hover:bg-[#C45A19] text-[#F5F1EA] border border-[#2A2520] hover:border-[#E47A2E] text-xs font-mono transition"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>Download Resume (PDF)</span>
+                                </a>
+                            </div>
+                        @endif
                     </dl>
                 </div>
 
@@ -151,12 +180,9 @@
                         <div class="p-6 rounded-2xl bg-[#151311] border border-[#2A2520] space-y-2">
                             <div class="flex items-center justify-between text-xs font-mono text-[#E47A2E]">
                                 <span>{{ $edu->started_at ? $edu->started_at->format('Y') : '' }} — {{ $edu->ended_at ? $edu->ended_at->format('Y') : 'Present' }}</span>
-                                @if($edu->gpa)
-                                    <span class="text-[#70685F]">GPA: {{ $edu->gpa }}</span>
-                                @endif
                             </div>
                             <h4 class="text-xl font-heading font-bold text-[#F5F1EA]">{{ $edu->institution }}</h4>
-                            <p class="text-sm font-mono text-[#9E958B]">{{ $edu->degree }} in {{ $edu->field_of_study }}</p>
+                            <p class="text-sm font-mono text-[#9E958B]">{{ $edu->degree }} in {{ $edu->major }}</p>
                             @if($edu->description)
                                 <p class="text-xs text-[#70685F] pt-2">{{ $edu->description }}</p>
                             @endif
@@ -179,8 +205,8 @@
                     <span>GET IN TOUCH</span>
                     <span>&rarr;</span>
                 </x-button>
-                <x-button href="{{ route('journey.index') }}" variant="secondary" size="lg">
-                    <span>EXPLORE JOURNEY</span>
+                <x-button href="{{ route('projects.index') }}" variant="secondary" size="lg">
+                    <span>EXPLORE PROJECTS</span>
                 </x-button>
             </div>
         </div>

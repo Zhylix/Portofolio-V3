@@ -47,9 +47,10 @@
             <button 
                 type="button" 
                 @click="$dispatch('open-modal', '{{ $modalId }}')"
-                class="text-[#E47A2E] hover:text-[#F5F1EA] transition-colors"
+                class="inline-flex items-center gap-1 text-[#E47A2E] hover:text-[#F5F1EA] transition-colors font-medium"
             >
-                Read Details &rarr;
+                <span>See Details</span>
+                <span>&rarr;</span>
             </button>
         </div>
     </div>
@@ -73,6 +74,20 @@
                     </div>
                 @endif
             </div>
+
+            @if($achievement->image_url)
+                <div class="rounded-xl overflow-hidden border border-[#2A2520] bg-[#0E0D0C]">
+                    <img 
+                        src="{{ $achievement->image_url }}" 
+                        alt="{{ $achievement->title }} award" 
+                        loading="lazy" 
+                        decoding="async" 
+                        width="800" 
+                        height="560" 
+                        class="w-full max-h-80 object-contain"
+                    >
+                </div>
+            @endif
 
             @if($achievement->description)
                 <div>

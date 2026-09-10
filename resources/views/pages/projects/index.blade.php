@@ -16,7 +16,7 @@
                     :active="!$categorySlug" 
                     :href="route('projects.index')"
                 >
-                    All Systems ({{ $projects->count() }})
+                    All Systems ({{ $projects->total() }})
                 </x-chip>
 
                 @foreach($categories as $cat)
@@ -50,6 +50,13 @@
                 </div>
             @endforelse
         </div>
+
+        <!-- Pagination Links -->
+        @if($projects->hasPages())
+            <div class="mt-12 pt-8 border-t border-[#2A2520]">
+                {{ $projects->links() }}
+            </div>
+        @endif
 
     </div>
 </x-layouts.app>

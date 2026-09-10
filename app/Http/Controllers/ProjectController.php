@@ -11,7 +11,7 @@ class ProjectController extends Controller
     public function index(Request $request, ProjectService $projectService): View
     {
         $categorySlug = $request->query('category');
-        $projects = $projectService->getAllProjects($categorySlug);
+        $projects = $projectService->getPaginatedProjects($categorySlug, 9);
         $categories = $projectService->getCategories();
 
         return view('pages.projects.index', compact('projects', 'categories', 'categorySlug'));

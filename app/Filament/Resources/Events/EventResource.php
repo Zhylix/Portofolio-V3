@@ -19,11 +19,11 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'MY JOURNEY';
+    protected static string|UnitEnum|null $navigationGroup = 'EXPERIENCE / BACKGROUND';
 
     protected static ?string $navigationLabel = 'Events';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendar;
 

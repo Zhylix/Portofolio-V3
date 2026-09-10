@@ -1,8 +1,14 @@
 @php
-    $profile = \App\Models\Profile::first();
+    try {
+        $profileService = app(\App\Services\ProfileService::class);
+        $profile = $profileService->getProfile();
+        $socialLinks = $profileService->getSocialLinks();
+    } catch (\Throwable) {
+        $profile = null;
+        $socialLinks = collect();
+    }
     $name = $profile ? $profile->full_name : 'Helmy Yunan Nasution';
     $tagline = $profile ? ($profile->headline ?? 'Software Engineer & System Architect') : 'Software Engineer & System Architect';
-    $socialLinks = \App\Models\SocialLink::ordered()->get();
 @endphp
 
 <footer class="mt-auto border-t border-[#2A2520] bg-[#0E0D0C]/90 backdrop-blur-md relative z-10">
@@ -53,9 +59,9 @@
                 <ul class="space-y-2 text-sm text-[#9E958B]">
                     <li><a href="{{ route('home') }}" class="hover:text-[#E47A2E] transition-colors">Home</a></li>
                     <li><a href="{{ route('about') }}" class="hover:text-[#E47A2E] transition-colors">About</a></li>
-                    <li><a href="{{ route('projects.index') }}" class="hover:text-[#E47A2E] transition-colors">Projects & Systems</a></li>
-                    <li><a href="{{ route('journey.index') }}" class="hover:text-[#E47A2E] transition-colors">Professional Journey</a></li>
-                    <li><a href="{{ route('skills.index') }}" class="hover:text-[#E47A2E] transition-colors">Skills & Capabilities</a></li>
+                    <li><a href="{{ route('projects.index') }}" class="hover:text-[#E47A2E] transition-colors">Projects</a></li>
+                    <li><a href="{{ route('skills.index') }}" class="hover:text-[#E47A2E] transition-colors">Skills</a></li>
+                    <li><a href="{{ route('achievements.index') }}" class="hover:text-[#E47A2E] transition-colors">Achievements</a></li>
                 </ul>
             </div>
 
@@ -63,9 +69,7 @@
             <div class="space-y-3">
                 <h4 class="text-xs font-mono uppercase tracking-widest text-[#F5F1EA]">Verification</h4>
                 <ul class="space-y-2 text-sm text-[#9E958B]">
-                    <li><a href="{{ route('certificates.index') }}" class="hover:text-[#E47A2E] transition-colors">Certifications</a></li>
-                    <li><a href="{{ route('achievements.index') }}" class="hover:text-[#E47A2E] transition-colors">Achievements</a></li>
-                    <li><a href="{{ route('articles.index') }}" class="hover:text-[#E47A2E] transition-colors">Technical Articles</a></li>
+                    <li><a href="{{ route('certificates.index') }}" class="hover:text-[#E47A2E] transition-colors">Certificates</a></li>
                     <li><a href="{{ route('contact.index') }}" class="hover:text-[#E47A2E] transition-colors">Contact</a></li>
                     <li><a href="/admin" class="hover:text-[#E47A2E] transition-colors text-xs font-mono text-[#70685F]">Admin Portal</a></li>
                 </ul>

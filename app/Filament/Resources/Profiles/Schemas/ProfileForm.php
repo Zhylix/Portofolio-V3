@@ -58,7 +58,9 @@ class ProfileForm
                                 SpatieMediaLibraryFileUpload::make('avatar')
                                     ->collection('avatar')
                                     ->image()
-                                    ->imageEditor(),
+                                    ->imageEditor()
+                                    ->maxSize(5120)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                                 SpatieMediaLibraryFileUpload::make('resume')
                                     ->collection('resume')
                                     ->acceptedFileTypes(['application/pdf'])

@@ -1,7 +1,8 @@
 <div 
     x-data="{
+        timer: null,
         init() {
-            setInterval(() => {
+            this.timer = setInterval(() => {
                 if ($wire.isPlaying) {
                     $wire.nextMilestone();
                     const activeEl = document.getElementById('milestone-' + $wire.currentIndex);
@@ -10,6 +11,11 @@
                     }
                 }
             }, 4500);
+        },
+        destroy() {
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
         }
     }"
     class="space-y-10"
@@ -118,5 +124,9 @@
                 </button>
             </div>
         @endforelse
+    </div>
+
+    <div class="pt-6">
+        {{ $experiences->links() }}
     </div>
 </div>

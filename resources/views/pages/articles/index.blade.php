@@ -51,5 +51,12 @@
             @endforelse
         </div>
 
+        <!-- Pagination Links -->
+        @if($articles->hasPages())
+            <div class="mt-12 pt-8 border-t border-[#2A2520]">
+                {{ $articles->links() }}
+            </div>
+        @endif
+
     </div>
 </x-layouts.app>

@@ -29,8 +29,8 @@ class PublicRoutesTest extends TestCase
         $homeResponse = $this->get('/');
         $homeResponse->assertStatus(200);
         $homeResponse->assertSee('Helmy Yunan Nasution');
-        $homeResponse->assertSee('FEATURED PROJECTS');
-        $homeResponse->assertSee('MY JOURNEY');
+        $homeResponse->assertSee('PROJECTS');
+        $homeResponse->assertDontSee('MY JOURNEY');
 
         // 2. About
         $aboutResponse = $this->get('/about');
@@ -47,43 +47,29 @@ class PublicRoutesTest extends TestCase
         $projectShowResponse->assertStatus(200);
         $projectShowResponse->assertSee($project->title);
 
-        // 5. Journey Index
-        $journeyResponse = $this->get('/journey');
-        $journeyResponse->assertStatus(200);
-        $journeyResponse->assertSee($experience->title);
-
-        // 6. Journey Show
-        $journeyShowResponse = $this->get('/journey/'.$experience->slug);
-        $journeyShowResponse->assertStatus(200);
-        $journeyShowResponse->assertSee($experience->title);
-
-        // 7. Skills Index
+        // 5. Skills Index
         $skillsResponse = $this->get('/skills');
         $skillsResponse->assertStatus(200);
 
-        // 8. Certificates Index
+        // 6. Certificates Index
         $certsResponse = $this->get('/certificates');
         $certsResponse->assertStatus(200);
 
-        // 9. Achievements Index
+        // 7. Achievements Index
         $achResponse = $this->get('/achievements');
         $achResponse->assertStatus(200);
 
-        // 10. Articles Index
-        $articlesResponse = $this->get('/articles');
-        $articlesResponse->assertStatus(200);
-        $articlesResponse->assertSee($article->title);
-
-        // 11. Articles Show
-        $articleShowResponse = $this->get('/articles/'.$article->slug);
-        $articleShowResponse->assertStatus(200);
-        $articleShowResponse->assertSee($article->title);
-
-        // 12. Contact Index
+        // 8. Contact Index
         $contactResponse = $this->get('/contact');
         $contactResponse->assertStatus(200);
         $contactResponse->assertSee('What are you looking for?');
         $contactResponse->assertSee('Collaboration');
+
+        // 9. Decommissioned routes strictly return 404
+        $this->get('/journey')->assertStatus(404);
+        $this->get('/journey/'.$experience->slug)->assertStatus(404);
+        $this->get('/articles')->assertStatus(404);
+        $this->get('/articles/'.$article->slug)->assertStatus(404);
     }
 
     public function test_contact_form_submission_with_new_type_options(): void

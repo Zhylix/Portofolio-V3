@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Events\Schemas;
 
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
@@ -40,9 +40,11 @@ class EventForm
                             ]),
                         Textarea::make('description')
                             ->rows(3),
-                        FileUpload::make('image')
+                        SpatieMediaLibraryFileUpload::make('image')
+                            ->collection('image')
                             ->image()
-                            ->directory('events'),
+                            ->maxSize(5120)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                     ]),
             ]);
     }

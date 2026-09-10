@@ -1,15 +1,41 @@
-import Alpine from 'alpinejs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { commandPalette } from './alpine/commandPalette';
+import { mobileMenu } from './alpine/mobileMenu';
+import { lightbox } from './alpine/lightbox';
+import { contactForm, tabSwitcher, interactions } from './alpine/interactions';
 
 gsap.registerPlugin(ScrollTrigger);
 
-window.Alpine = Alpine;
 window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
-// Start Alpine
-Alpine.start();
+// Expose globally on window for direct expression evaluation
+window.commandPalette = commandPalette;
+window.mobileMenu = mobileMenu;
+window.lightbox = lightbox;
+window.contactForm = contactForm;
+window.tabSwitcher = tabSwitcher;
+window.interactions = interactions;
+
+// Safely register Alpine components with Livewire's Alpine instance (Single Instance Architecture)
+const registerAlpineComponents = (Alpine) => {
+    if (!Alpine) return;
+    Alpine.data('commandPalette', commandPalette);
+    Alpine.data('mobileMenu', mobileMenu);
+    Alpine.data('lightbox', lightbox);
+    Alpine.data('contactForm', contactForm);
+    Alpine.data('tabSwitcher', tabSwitcher);
+    Alpine.data('interactions', interactions);
+};
+
+if (window.Alpine) {
+    registerAlpineComponents(window.Alpine);
+} else {
+    document.addEventListener('alpine:init', () => {
+        registerAlpineComponents(window.Alpine);
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;

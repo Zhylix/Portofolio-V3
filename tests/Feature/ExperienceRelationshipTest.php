@@ -49,10 +49,9 @@ class ExperienceRelationshipTest extends TestCase
         $this->assertTrue($experience->certificates->contains($certificate));
         $this->assertTrue($experience->events->contains($event));
 
-        // Test route with slug
+        // Assert decommissioned public route returns 404
         $response = $this->get('/journey/'.$experience->slug);
-        $response->assertStatus(200);
-        $response->assertSee($experience->title);
+        $response->assertStatus(404);
     }
 
     public function test_admin_can_toggle_experience_type_visibility(): void

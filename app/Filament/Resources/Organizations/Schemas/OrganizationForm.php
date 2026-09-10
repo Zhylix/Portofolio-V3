@@ -35,7 +35,9 @@ class OrganizationForm
                             ->rows(3),
                         SpatieMediaLibraryFileUpload::make('logo')
                             ->collection('logo')
-                            ->image(),
+                            ->image()
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']),
                     ]),
             ]);
     }

@@ -63,7 +63,9 @@ class CertificateForm
                             ->preload(),
                         SpatieMediaLibraryFileUpload::make('image')
                             ->collection('image')
-                            ->image(),
+                            ->image()
+                            ->maxSize(10240)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf']),
                     ]),
             ]);
     }

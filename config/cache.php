@@ -1,6 +1,33 @@
 <?php
 
+use App\Models\Achievement;
+use App\Models\Article;
+use App\Models\Certificate;
+use App\Models\ContactMessage;
+use App\Models\Education;
+use App\Models\Event;
+use App\Models\Experience;
+use App\Models\ExperienceType;
+use App\Models\Organization;
+use App\Models\Profile;
+use App\Models\Project;
+use App\Models\ProjectCategory;
+use App\Models\SeoMetadata;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Skill;
+use App\Models\SkillCategory;
+use App\Models\SocialLink;
+use App\Models\Technology;
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 return [
 
@@ -131,6 +158,47 @@ return [
     |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => match (env('CACHE_SERIALIZABLE_CLASSES')) {
+        'true', true => true,
+        'false', false => false,
+        default => [
+            // Collections & Paginators
+            Illuminate\Database\Eloquent\Collection::class,
+            Collection::class,
+            LengthAwarePaginator::class,
+            Paginator::class,
+
+            // Dates & Time
+            Illuminate\Support\Carbon::class,
+            Carbon::class,
+            CarbonImmutable::class,
+
+            // Domain Models
+            Achievement::class,
+            Article::class,
+            Certificate::class,
+            ContactMessage::class,
+            Education::class,
+            Event::class,
+            Experience::class,
+            ExperienceType::class,
+            Organization::class,
+            Profile::class,
+            Project::class,
+            ProjectCategory::class,
+            SeoMetadata::class,
+            Service::class,
+            Setting::class,
+            Skill::class,
+            SkillCategory::class,
+            SocialLink::class,
+            Technology::class,
+            User::class,
+
+            // Spatie Packages
+            Media::class,
+            MediaCollection::class,
+        ],
+    },
 
 ];

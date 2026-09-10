@@ -18,9 +18,11 @@ class EducationResource extends Resource
 {
     protected static ?string $model = Education::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'EXPERIENCE / BACKGROUND';
+
     protected static ?string $navigationLabel = 'Education';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 

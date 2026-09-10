@@ -2,14 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Achievement;
-use App\Models\Certificate;
-use App\Models\Experience;
-use App\Models\ExperienceType;
-use App\Models\Organization;
 use App\Models\Project;
-use App\Models\Skill;
-use App\Models\SkillCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -51,40 +44,27 @@ class InteractiveExperienceTest extends TestCase
         $response->assertSee('open-command-palette', false);
     }
 
-    public function test_journey_case_study_renders_connected_evidence_and_artifacts(): void
+    public function test_project_show_renders_interactive_details(): void
     {
-        $type = ExperienceType::factory()->create(['is_active' => true]);
-        $org = Organization::factory()->create();
-
-        $experience = Experience::factory()->create([
-            'experience_type_id' => $type->id,
-            'organization_id' => $org->id,
-            'title' => 'Chief Architect at ScaleCorp',
-            'slug' => 'chief-architect-scalecorp',
-            'status' => 'published',
-            'visibility' => 'public',
+        $project = Project::factory()->create([
+            'title' => 'Distributed Cache Gateway',
+            'slug' => 'distributed-cache-gateway',
+            'description' => 'Detailed architecture for high-throughput distributed caching.',
         ]);
 
-        $cat = SkillCategory::factory()->create();
-        $skill = Skill::factory()->create(['skill_category_id' => $cat->id, 'name' => 'Kubernetes Clustering']);
-        $project = Project::factory()->create(['title' => 'Distributed Cache Gateway', 'slug' => 'distributed-cache-gateway']);
-        $cert = Certificate::factory()->create(['title' => 'AWS Solutions Architect Professional']);
-        $ach = Achievement::factory()->create(['title' => 'National Hackathon Champion']);
-
-        $experience->skills()->attach($skill);
-        $experience->projects()->attach($project);
-        $experience->certificates()->attach($cert);
-        $experience->achievements()->attach($ach);
-
-        $response = $this->get(route('journey.show', $experience->slug));
+        $response = $this->get(route('projects.show', $project->slug));
 
         $response->assertStatus(200);
-        $response->assertSee('Chief Architect at ScaleCorp');
-        $response->assertSee('Kubernetes Clustering');
         $response->assertSee('Distributed Cache Gateway');
-        $response->assertSee('AWS Solutions Architect Professional');
-        $response->assertSee('National Hackathon Champion');
-        $response->assertSee('data-cursor="view"', false);
-        $response->assertSee('data-cursor="explore"', false);
+        $response->assertSee('Detailed architecture for high-throughput distributed caching.');
+    }
+
+    public function test_journey_routes_are_decommissioned_and_return_404(): void
+    {
+        $response = $this->get('/journey');
+        $response->assertStatus(404);
+
+        $responseSlug = $this->get('/journey/some-experience-slug');
+        $responseSlug->assertStatus(404);
     }
 }

@@ -41,7 +41,10 @@
 
         <div class="mt-4 pt-3 border-t border-[#2A2520] flex items-center justify-between text-[11px] font-mono text-[#70685F] group-hover:text-[#9E958B]">
             <span>{{ $evidenceCount }} Evidence {{ Str::plural('Artifact', $evidenceCount) }}</span>
-            <span class="text-[#E47A2E] group-hover:translate-x-1 transition-transform">&rarr;</span>
+            <span class="text-[#E47A2E] group-hover:translate-x-0.5 transition-transform flex items-center gap-1 font-medium">
+                <span>Explore</span>
+                <span>&rarr;</span>
+            </span>
         </div>
     </button>
 
@@ -86,33 +89,6 @@
                                 <span class="text-xs text-[#9E958B] line-clamp-1 mt-0.5">
                                     {{ $project->short_description }}
                                 </span>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            <!-- Related Experiences -->
-            @if($skill->experiences->isNotEmpty())
-                <div class="pt-4 border-t border-[#2A2520]">
-                    <h5 class="text-xs font-mono uppercase tracking-widest text-[#E47A2E] mb-3">
-                        Professional Journey Deployments ({{ $skill->experiences->count() }})
-                    </h5>
-                    <div class="space-y-2">
-                        @foreach($skill->experiences as $exp)
-                            <a 
-                                href="{{ route('journey.show', $exp->slug) }}" 
-                                class="flex items-center justify-between p-3 rounded-xl bg-[#151311] border border-[#2A2520] hover:border-[#C45A19] transition group/exp"
-                            >
-                                <div>
-                                    <span class="text-sm font-semibold text-[#F5F1EA] group-hover/exp:text-[#E47A2E] block">
-                                        {{ $exp->title }}
-                                    </span>
-                                    <span class="text-xs text-[#70685F] font-mono">
-                                        {{ $exp->role }} &bull; {{ $exp->organization->name ?? 'Organization' }}
-                                    </span>
-                                </div>
-                                <span class="text-xs font-mono text-[#E47A2E]">&rarr;</span>
                             </a>
                         @endforeach
                     </div>

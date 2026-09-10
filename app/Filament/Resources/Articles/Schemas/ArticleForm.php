@@ -45,7 +45,9 @@ class ArticleForm
                                     ->default(now()),
                                 SpatieMediaLibraryFileUpload::make('thumbnail')
                                     ->collection('thumbnail')
-                                    ->image(),
+                                    ->image()
+                                    ->maxSize(10240)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                             ]),
                     ]),
 

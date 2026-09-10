@@ -49,7 +49,7 @@
         <div class="space-y-2">
             <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                 <h3 class="text-xl font-heading font-bold text-[#F5F1EA] group-hover:text-[#E47A2E] transition-colors">
-                    <a href="{{ route('journey.show', $experience->slug) }}" class="focus:outline-none">
+                    <a href="{{ \Illuminate\Support\Facades\Route::has('journey.show') ? route('journey.show', $experience->slug) : '#' }}" class="focus:outline-none">
                         {{ $experience->title }}
                     </a>
                 </h3>
@@ -80,7 +80,7 @@
         <!-- Case Study Link -->
         <div class="pt-2 flex items-center justify-between">
             <a 
-                href="{{ route('journey.show', $experience->slug) }}" 
+                href="{{ \Illuminate\Support\Facades\Route::has('journey.show') ? route('journey.show', $experience->slug) : '#' }}" 
                 class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#E47A2E] group-hover:text-[#F5F1EA] transition-colors"
             >
                 <span>Read Full Case Study</span>

@@ -18,9 +18,11 @@ class AchievementResource extends Resource
 {
     protected static ?string $model = Achievement::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'PORTFOLIO';
+
     protected static ?string $navigationLabel = 'Achievements';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 5;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
 

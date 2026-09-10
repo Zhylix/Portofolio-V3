@@ -18,9 +18,11 @@ class ContactMessageResource extends Resource
 {
     protected static ?string $model = ContactMessage::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'SYSTEM';
+
     protected static ?string $navigationLabel = 'Messages';
 
-    protected static ?int $navigationSort = 13;
+    protected static ?int $navigationSort = 4;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 

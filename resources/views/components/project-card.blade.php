@@ -3,7 +3,9 @@
 ])
 
 @php
-    $imageUrl = $project->getFirstMediaUrl('featured_image') ?: $project->getFirstMediaUrl();
+    $imageUrl = $project->getFirstMediaUrl('thumbnail', 'thumb')
+        ?: ($project->getFirstMediaUrl('thumbnail')
+        ?: ($project->getFirstMediaUrl('featured_image') ?: $project->getFirstMediaUrl()));
 @endphp
 
 <article data-cursor="view" class="group relative flex flex-col bg-[#151311] border border-[#2A2520] hover:border-[#C45A19]/60 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#C45A19]/10">
@@ -12,8 +14,11 @@
         @if($imageUrl)
             <img 
                 src="{{ $imageUrl }}" 
-                alt="{{ $project->title }}" 
+                alt="{{ $project->title }} thumbnail" 
                 loading="lazy"
+                decoding="async"
+                width="400"
+                height="250"
                 class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
             />
         @else
@@ -75,16 +80,14 @@
             @endif
         </div>
 
-        <!-- Action / Case Study Link -->
+        <!-- Action / Project Link -->
         <div class="pt-2 flex items-center justify-between">
             <a 
                 href="{{ route('projects.show', $project->slug) }}" 
-                class="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#E47A2E] group-hover:text-[#F5F1EA] transition-colors"
+                class="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-[#E47A2E] group-hover:text-[#F5F1EA] transition-colors font-medium"
             >
-                <span>Case Study</span>
-                <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
+                <span>View Project</span>
+                <span class="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
             </a>
 
             @if($project->demo_url || $project->github_url)

@@ -9,7 +9,7 @@ class CertificateController extends Controller
 {
     public function index(): View
     {
-        $certificates = Certificate::with(['skills', 'experiences'])->ordered()->get();
+        $certificates = Certificate::with(['skills', 'experiences'])->ordered()->paginate(12)->withQueryString();
 
         return view('pages.certificates.index', compact('certificates'));
     }

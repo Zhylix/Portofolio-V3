@@ -142,12 +142,16 @@ class ProjectForm
                         SpatieMediaLibraryFileUpload::make('thumbnail')
                             ->collection('thumbnail')
                             ->image()
-                            ->imageEditor(),
+                            ->imageEditor()
+                            ->maxSize(10240)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                         SpatieMediaLibraryFileUpload::make('screenshots')
                             ->collection('screenshots')
                             ->multiple()
                             ->image()
-                            ->reorderable(),
+                            ->reorderable()
+                            ->maxSize(10240)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
                     ]),
             ]);
     }

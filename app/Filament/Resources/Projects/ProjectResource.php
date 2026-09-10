@@ -19,11 +19,11 @@ class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'WORK';
+    protected static string|UnitEnum|null $navigationGroup = 'PORTFOLIO';
 
     protected static ?string $navigationLabel = 'Projects';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
 

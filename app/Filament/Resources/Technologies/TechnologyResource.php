@@ -19,11 +19,11 @@ class TechnologyResource extends Resource
 {
     protected static ?string $model = Technology::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'WORK';
+    protected static string|UnitEnum|null $navigationGroup = 'PORTFOLIO';
 
     protected static ?string $navigationLabel = 'Technologies';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 7;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCommandLine;
 

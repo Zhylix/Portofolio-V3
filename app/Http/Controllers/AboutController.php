@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Education;
-use App\Models\Profile;
 use App\Models\Service;
-use App\Models\Skill;
-use App\Models\SocialLink;
+use App\Services\ProfileService;
+use App\Services\SkillService;
 use Illuminate\Contracts\View\View;
 
 class AboutController extends Controller
 {
-    public function index(): View
+    public function index(ProfileService $profileService, SkillService $skillService): View
     {
-        $profile = Profile::first();
+        $profile = $profileService->getProfile();
         $educations = Education::ordered()->get();
-        $socialLinks = SocialLink::ordered()->get();
+        $socialLinks = $profileService->getSocialLinks();
         $services = Service::ordered()->get();
-        $skills = Skill::with('category')->featured()->ordered()->get();
+        $skills = $skillService->getFeaturedSkills();
 
         return view('pages.about', compact('profile', 'educations', 'socialLinks', 'services', 'skills'));
     }

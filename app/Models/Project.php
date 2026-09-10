@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Project extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Searchable;
 
     protected $fillable = [
         'category_id',
@@ -73,6 +76,58 @@ class Project extends Model implements HasMedia
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class, 'article_project');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('thumbnail')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+
+        $this->addMediaCollection('screenshots')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(400)
+            ->height(250)
+            ->format('webp')
+            ->nonQueued()
+            ->performOnCollections('thumbnail', 'screenshots');
+
+        $this->addMediaConversion('medium')
+            ->width(800)
+            ->height(500)
+            ->format('webp')
+            ->nonQueued()
+            ->performOnCollections('thumbnail');
+
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->height(750)
+            ->format('webp')
+            ->nonQueued()
+            ->performOnCollections('thumbnail', 'screenshots');
+    }
+
+    public function seo(): MorphOne
+    {
+        return $this->morphOne(SeoMetadata::class, 'seomodel');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (int) $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'short_description' => $this->short_description,
+            'problem' => $this->problem,
+            'solution' => $this->solution,
+            'role' => $this->role,
+        ];
     }
 
     public function scopeFeatured(Builder $query): Builder

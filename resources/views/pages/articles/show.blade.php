@@ -1,4 +1,21 @@
-<x-layouts.app :title="$article->title">
+@php
+    $thumbnailUrl = $article->thumbnail_url ?: asset('images/og-card.png');
+    $metaDesc = $article->seo?->meta_description ?? ($article->excerpt ?: Str::limit(strip_tags($article->content), 160));
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => route('home')],
+        ['name' => 'Articles', 'url' => route('articles.index')],
+        ['name' => $article->title, 'url' => route('articles.show', $article->slug)],
+    ];
+@endphp
+
+<x-layouts.app 
+    :title="$article->title . ' — Article'"
+    :meta-description="$metaDesc"
+    :og-image="$thumbnailUrl"
+    :article="$article"
+    :breadcrumbs="$breadcrumbs"
+    og-type="article"
+>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Back Navigation -->
         <div class="mb-8">
@@ -33,6 +50,20 @@
                     </p>
                 @endif
             </header>
+
+            @if($article->thumbnail_url)
+                <div class="rounded-3xl overflow-hidden border border-[#2A2520] bg-[#0E0D0C] aspect-video max-h-[420px]">
+                    <img 
+                        src="{{ $article->thumbnail_url }}" 
+                        alt="{{ $article->title }}" 
+                        loading="eager"
+                        decoding="async"
+                        width="1200"
+                        height="630"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            @endif
 
             <!-- Article Content -->
             <div class="prose prose-invert max-w-none text-[#F5F1EA] leading-relaxed text-base sm:text-lg font-sans space-y-6">

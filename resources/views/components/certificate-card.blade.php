@@ -4,7 +4,9 @@
 
 @php
     $modalId = 'cert-modal-' . $certificate->id;
-    $mediaUrl = $certificate->getFirstMediaUrl('certificate_file') ?: $certificate->getFirstMediaUrl();
+    $mediaUrl = $certificate->getFirstMediaUrl('image', 'preview')
+        ?: ($certificate->getFirstMediaUrl('image')
+        ?: ($certificate->getFirstMediaUrl('certificate_file') ?: $certificate->image_url));
     $issuedDate = $certificate->issued_at ? $certificate->issued_at->format('F Y') : 'N/A';
 @endphp
 
@@ -45,13 +47,27 @@
         <div class="mt-6 pt-4 border-t border-[#2A2520] flex items-center justify-between text-xs font-mono">
             <span class="text-[#70685F]">{{ $issuedDate }}</span>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
+                @if($certificate->credential_url)
+                    <a 
+                        href="{{ $certificate->credential_url }}" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="text-[#9E958B] hover:text-[#F5F1EA] transition-colors inline-flex items-center gap-0.5"
+                        title="Verify credential online"
+                    >
+                        <span>Verify</span>
+                        <span>&nearr;</span>
+                    </a>
+                @endif
+
                 <button 
                     type="button" 
                     @click="$dispatch('open-modal', '{{ $modalId }}')"
-                    class="text-[#E47A2E] hover:text-[#F5F1EA] transition-colors"
+                    class="inline-flex items-center gap-1 text-[#E47A2E] hover:text-[#F5F1EA] transition-colors font-medium"
                 >
-                    View Details &rarr;
+                    <span>See Details</span>
+                    <span>&rarr;</span>
                 </button>
             </div>
         </div>
@@ -88,7 +104,7 @@
 
             @if($mediaUrl)
                 <div class="rounded-xl overflow-hidden border border-[#2A2520] bg-[#0E0D0C]">
-                    <img src="{{ $mediaUrl }}" alt="{{ $certificate->title }}" class="w-full max-h-80 object-contain">
+                    <img src="{{ $mediaUrl }}" alt="{{ $certificate->title }}" loading="lazy" decoding="async" width="800" height="560" class="w-full max-h-80 object-contain">
                 </div>
             @endif
 

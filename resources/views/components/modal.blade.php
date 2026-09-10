@@ -17,6 +17,7 @@
 
 <div
     x-data="{ show: false }"
+    x-init="$watch('show', value => { document.body.style.overflow = value ? 'hidden' : '' })"
     x-show="show"
     x-on:open-modal.window="$event.detail == '{{ $name }}' ? show = true : null"
     x-on:close-modal.window="$event.detail == '{{ $name }}' ? show = false : null"

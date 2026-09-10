@@ -18,9 +18,11 @@ class SeoMetadataResource extends Resource
 {
     protected static ?string $model = SeoMetadata::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'SYSTEM';
+
     protected static ?string $navigationLabel = 'SEO';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlass;
 

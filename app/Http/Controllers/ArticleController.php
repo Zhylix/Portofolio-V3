@@ -9,7 +9,7 @@ class ArticleController extends Controller
 {
     public function index(): View
     {
-        $articles = Article::with(['skills', 'projects'])->published()->ordered()->get();
+        $articles = Article::with(['skills', 'projects'])->published()->ordered()->paginate(9)->withQueryString();
 
         return view('pages.articles.index', compact('articles'));
     }

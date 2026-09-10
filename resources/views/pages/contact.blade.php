@@ -74,21 +74,14 @@
             <!-- Right 2 Cols: Conversational Multi-Step Form -->
             <div class="lg:col-span-2">
                 <div 
-                    x-data="{
-                        step: 1,
-                        selectedType: '{{ old('type', 'project') }}',
-                        subject: '{{ old('subject', '') }}',
-                        name: '{{ old('name', '') }}',
-                        email: '{{ old('email', '') }}',
-                        message: '{{ old('message', '') }}',
-                        typeLabels: {
-                            website: 'Website',
-                            collaboration: 'Collaboration',
-                            freelance: 'Freelance Contract',
-                            project: 'System Architecture Project',
-                            just_say_hi: 'Just Say Hi'
-                        }
-                    }"
+                    x-data="contactForm({
+                        step: {{ $errors->any() ? 3 : 1 }},
+                        type: {{ \Illuminate\Support\Js::from(old('type', 'project')) }},
+                        subject: {{ \Illuminate\Support\Js::from(old('subject', '')) }},
+                        name: {{ \Illuminate\Support\Js::from(old('name', '')) }},
+                        email: {{ \Illuminate\Support\Js::from(old('email', '')) }},
+                        message: {{ \Illuminate\Support\Js::from(old('message', '')) }}
+                    })"
                     class="p-8 sm:p-10 rounded-3xl bg-[#151311] border border-[#2A2520] shadow-2xl relative"
                 >
                     <!-- Success Banner -->
@@ -138,6 +131,11 @@
                         class="space-y-8"
                     >
                         @csrf
+
+                        {{-- Honeypot anti-spam protection --}}
+                        <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                            <input type="text" name="website_hp" tabindex="-1" autocomplete="off">
+                        </div>
 
                         <input type="hidden" name="type" :value="selectedType">
 

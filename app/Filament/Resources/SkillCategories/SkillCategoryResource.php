@@ -19,11 +19,11 @@ class SkillCategoryResource extends Resource
 {
     protected static ?string $model = SkillCategory::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'SKILLS';
+    protected static string|UnitEnum|null $navigationGroup = 'PORTFOLIO';
 
-    protected static ?string $navigationLabel = 'Categories';
+    protected static ?string $navigationLabel = 'Skill Categories';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 8;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
 

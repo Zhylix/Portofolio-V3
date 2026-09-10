@@ -1,13 +1,16 @@
 @php
-    $profile = \App\Models\Profile::first();
+    try {
+        $profile = app(\App\Services\ProfileService::class)->getProfile();
+    } catch (\Throwable) {
+        $profile = null;
+    }
     $brandName = $profile ? ($profile->full_name ? explode(' ', $profile->full_name)[0] : 'HELMY') : 'ZEPHYR';
     $isAvailable = $profile ? $profile->is_available : true;
 @endphp
 
 <header 
-    x-data="{ scrolled: false, mobileOpen: false }" 
-    x-init="scrolled = (window.pageYOffset > 10)"
-    @scroll.window="scrolled = (window.pageYOffset > 10)"
+    x-data="mobileMenu()" 
+    x-on:keydown.escape.window="close()"
     class="fixed top-4 sm:top-6 inset-x-0 z-50 px-4 sm:px-6 pointer-events-none"
 >
     <div class="max-w-5xl mx-auto flex items-center justify-between">
@@ -44,13 +47,7 @@
                     href="{{ route('projects.index') }}" 
                     class="px-2.5 py-1.5 rounded-full transition-colors {{ request()->routeIs('projects.*') ? 'text-[#F5F1EA] bg-[#1E1A17] font-semibold text-[#E47A2E]' : 'hover:text-[#F5F1EA] hover:bg-[#151311]' }}"
                 >
-                    Work
-                </a>
-                <a 
-                    href="{{ route('journey.index') }}" 
-                    class="px-2.5 py-1.5 rounded-full transition-colors {{ request()->routeIs('journey.*') ? 'text-[#F5F1EA] bg-[#1E1A17] font-semibold text-[#E47A2E]' : 'hover:text-[#F5F1EA] hover:bg-[#151311]' }}"
-                >
-                    Journey
+                    Projects
                 </a>
                 <a 
                     href="{{ route('skills.index') }}" 
@@ -59,16 +56,16 @@
                     Skills
                 </a>
                 <a 
+                    href="{{ route('achievements.index') }}" 
+                    class="px-2.5 py-1.5 rounded-full transition-colors {{ request()->routeIs('achievements.*') ? 'text-[#F5F1EA] bg-[#1E1A17] font-semibold text-[#E47A2E]' : 'hover:text-[#F5F1EA] hover:bg-[#151311]' }}"
+                >
+                    Achievements
+                </a>
+                <a 
                     href="{{ route('certificates.index') }}" 
                     class="px-2.5 py-1.5 rounded-full transition-colors {{ request()->routeIs('certificates.*') ? 'text-[#F5F1EA] bg-[#1E1A17] font-semibold text-[#E47A2E]' : 'hover:text-[#F5F1EA] hover:bg-[#151311]' }}"
                 >
-                    Certs
-                </a>
-                <a 
-                    href="{{ route('articles.index') }}" 
-                    class="px-2.5 py-1.5 rounded-full transition-colors {{ request()->routeIs('articles.*') ? 'text-[#F5F1EA] bg-[#1E1A17] font-semibold text-[#E47A2E]' : 'hover:text-[#F5F1EA] hover:bg-[#151311]' }}"
-                >
-                    Articles
+                    Certificates
                 </a>
             </div>
 
@@ -110,10 +107,11 @@
                 <!-- Mobile Hamburger Button -->
                 <div class="md:hidden flex items-center">
                     <button 
-                        @click="mobileOpen = !mobileOpen" 
+                        @click="toggle()" 
                         type="button" 
-                        class="p-2 rounded-full text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311] border border-transparent focus:outline-none focus:border-[#C45A19] transition"
+                        class="p-2 rounded-full text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311] border border-transparent focus:outline-none focus:border-[#C45A19] focus-visible:ring-2 focus-visible:ring-[#C45A19] transition"
                         aria-label="Toggle Navigation Menu"
+                        :aria-expanded="mobileOpen.toString()"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -134,36 +132,33 @@
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-4"
-        @click.away="mobileOpen = false"
+        @click.away="close()"
         class="md:hidden pointer-events-auto mt-3 max-w-sm mx-auto bg-[#0E0D0C]/95 backdrop-blur-2xl border border-[#2A2520] rounded-2xl p-4 shadow-2xl"
     >
         <div class="flex flex-col space-y-1 text-sm font-mono uppercase tracking-wider">
-            <a href="{{ route('home') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+            <a href="{{ route('home') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
                 Home
             </a>
-            <a href="{{ route('about') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('about') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+            <a href="{{ route('about') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('about') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
                 About
             </a>
-            <a href="{{ route('projects.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('projects.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
-                Work
+            <a href="{{ route('projects.index') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('projects.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+                Projects
             </a>
-            <a href="{{ route('journey.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('journey.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
-                Journey
-            </a>
-            <a href="{{ route('skills.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('skills.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+            <a href="{{ route('skills.index') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('skills.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
                 Skills
             </a>
-            <a href="{{ route('certificates.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('certificates.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
-                Certificates
-            </a>
-            <a href="{{ route('achievements.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('achievements.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+            <a href="{{ route('achievements.index') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('achievements.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
                 Achievements
             </a>
-            <a href="{{ route('articles.index') }}" @click="mobileOpen = false" class="px-3 py-2 rounded-lg {{ request()->routeIs('articles.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
-                Articles
+            <a href="{{ route('certificates.index') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('certificates.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+                Certificates
+            </a>
+            <a href="{{ route('contact.index') }}" @click="close()" class="px-3 py-2 rounded-lg {{ request()->routeIs('contact.*') ? 'bg-[#1E1A17] text-[#E47A2E] font-semibold' : 'text-[#9E958B] hover:text-[#F5F1EA] hover:bg-[#151311]' }}">
+                Contact
             </a>
             <div class="pt-2 border-t border-[#2A2520]">
-                <a href="{{ route('contact.index') }}" @click="mobileOpen = false" class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#C45A19] text-[#F5F1EA] font-semibold hover:bg-[#E47A2E] transition">
+                <a href="{{ route('contact.index') }}" @click="close()" class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#C45A19] text-[#F5F1EA] font-semibold hover:bg-[#E47A2E] transition">
                     <span>Get in Touch</span>
                     <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                 </a>

@@ -18,9 +18,11 @@ class CertificateResource extends Resource
 {
     protected static ?string $model = Certificate::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'PORTFOLIO';
+
     protected static ?string $navigationLabel = 'Certificates';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 4;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 

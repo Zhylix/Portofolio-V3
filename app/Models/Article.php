@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Article extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Searchable;
 
     protected $fillable = [
         'title',
@@ -30,6 +33,53 @@ class Article extends Model implements HasMedia
         return [
             'published_at' => 'datetime',
             'status' => ContentStatus::class,
+        ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('thumbnail')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(400)
+            ->height(250)
+            ->format('webp')
+            ->nonQueued()
+            ->performOnCollections('thumbnail');
+
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->height(630)
+            ->format('webp')
+            ->nonQueued()
+            ->performOnCollections('thumbnail');
+    }
+
+    public function seo(): MorphOne
+    {
+        return $this->morphOne(SeoMetadata::class, 'seomodel');
+    }
+
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('thumbnail', 'large')
+            ?: ($this->getFirstMediaUrl('thumbnail')
+            ?: ($this->thumbnail ? asset($this->thumbnail) : null));
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (int) $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'excerpt' => $this->excerpt,
+            'category' => $this->category,
         ];
     }
 

@@ -1,4 +1,21 @@
-<x-layouts.app :title="$project->title . ' — Case Study'">
+@php
+    $heroImage = $project->getFirstMediaUrl('thumbnail', 'large') ?: ($project->getFirstMediaUrl('thumbnail') ?: asset('images/og-card.png'));
+    $screenshots = $project->getMedia('screenshots');
+    $metaDesc = $project->seo?->meta_description ?? $project->short_description;
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => route('home')],
+        ['name' => 'Projects', 'url' => route('projects.index')],
+        ['name' => $project->title, 'url' => route('projects.show', $project->slug)],
+    ];
+@endphp
+
+<x-layouts.app 
+    :title="$project->title . ' — Case Study'"
+    :meta-description="$metaDesc"
+    :og-image="$heroImage"
+    :breadcrumbs="$breadcrumbs"
+    og-type="article"
+>
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Back Navigation -->
         <div class="mb-8">
@@ -80,6 +97,20 @@
                 </div>
             </header>
 
+            @if($project->getFirstMediaUrl('thumbnail'))
+                <div class="rounded-3xl overflow-hidden border border-[#2A2520] bg-[#0E0D0C] aspect-video max-h-[500px]">
+                    <img 
+                        src="{{ $project->getFirstMediaUrl('thumbnail', 'large') ?: $project->getFirstMediaUrl('thumbnail') }}" 
+                        alt="{{ $project->title }} system architecture" 
+                        loading="eager"
+                        decoding="async"
+                        width="1200"
+                        height="750"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            @endif
+
             <!-- Problem & Solution Split Cards -->
             @if($project->problem || $project->solution)
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -148,6 +179,27 @@
                     <h3 class="text-2xl font-heading font-bold text-[#F5F1EA]">Complete Case Study Narrative</h3>
                     <div class="prose prose-invert max-w-none text-[#9E958B] leading-relaxed font-sans space-y-4">
                         {!! nl2br(e($project->description)) !!}
+                    </div>
+                </div>
+            @endif
+
+            @if($screenshots->isNotEmpty())
+                <div class="p-8 rounded-3xl bg-[#151311] border border-[#2A2520] space-y-6">
+                    <h3 class="text-2xl font-heading font-bold text-[#F5F1EA]">System Gallery & Screenshots</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        @foreach($screenshots as $shot)
+                            <a href="{{ $shot->getUrl('large') ?: $shot->getUrl() }}" target="_blank" rel="noopener noreferrer" class="rounded-2xl overflow-hidden border border-[#2A2520] block group aspect-video bg-[#0E0D0C]">
+                                <img 
+                                    src="{{ $shot->getUrl('thumb') ?: $shot->getUrl() }}" 
+                                    alt="{{ $project->title }} screenshot {{ $loop->iteration }}" 
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="400"
+                                    height="250"
+                                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                />
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             @endif

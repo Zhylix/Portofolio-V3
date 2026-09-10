@@ -18,6 +18,8 @@ class ProfileResource extends Resource
 {
     protected static ?string $model = Profile::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'PORTFOLIO';
+
     protected static ?string $navigationLabel = 'Profile';
 
     protected static ?int $navigationSort = 1;

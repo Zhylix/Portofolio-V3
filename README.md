@@ -1,58 +1,224 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Zephyr Portfolio — Personal Information & Professional Journey System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Helmy Yunan Nasution** — Software Engineer & System Architect  
+> Specializing in High-Performance Distributed Backends, Relational Modeling, and Scalable Architecture.
 
-## About Laravel
+A modern, production-grade personal digital experience built with Laravel 13, PHP 8.4, Tailwind CSS 4, Alpine.js, Livewire, and Filament 5.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Architecture & Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Framework**: Laravel 13.x running on PHP 8.4
+- **Database**: MySQL 8.0+ / MariaDB with indexed relational schemas
+- **CMS & Administration**: Filament 5 Administrative Panel
+- **Frontend Layer**: Laravel Blade components, Tailwind CSS 4 (Theme tokens), Alpine.js, GSAP ScrollTrigger
+- **Reactive UI**: Livewire 4 (Journey autoplay, Timeline filtering)
+- **Search Engine**: Laravel Scout (Database engine) multi-domain search across Projects, Experiences, Skills, Articles
+- **Media Engine**: Spatie Media Library with optimized WebP conversions
+- **Cache Engine**: Relational Database cache store hardened with Laravel 13 `serializable_classes` allowlists and self-healing resilience
+- **Security & Headers**: Strict CSP, HSTS, X-Frame-Options, Honeypot bot protection, and sanitized inputs
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Design System
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Background Palette**: Surface `#080808` (Obsidian), `#0E0D0C`, `#151311`, `#1E1A17`
+- **Accent Palette**: Burnt Orange `#C45A19`, Radiant Amber `#E47A2E`
+- **Text Palette**: Warm White `#F5F1EA`, Muted Gray `#9E958B`, Dim `#70685F`
+- **Typography**: Space Grotesk (Headings), Inter (Body copy), JetBrains Mono (Technical telemetry)
+- **Styling Paradigm**: Subtle glassmorphic cards (`glass-card`), ambient radial gradients, and keyboard-first accessibility
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## System Requirements
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- PHP `>= 8.4` (Extensions: `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`, `fileinfo`, `gd` or `imagick`)
+- Composer `>= 2.7`
+- Node.js `>= 20.x` & NPM `>= 10.x`
+- MySQL `>= 8.0` or MariaDB `>= 10.5`
 
+---
+
+## Quick Installation Guide
+
+### 1. Clone the Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/your-org/portfolio.git
+cd portfolio
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependencies
+```bash
+# Install PHP dependencies
+composer install
 
-## Contributing
+# Install Node.js dependencies
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Environment Configuration
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Configure your `.env` database and cache parameters:
+```dotenv
+APP_NAME="Helmy Yunan Nasution"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=helmy_portfolio
+DB_USERNAME=root
+DB_PASSWORD=your_password_here
 
-## Security Vulnerabilities
+SESSION_DRIVER=database
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+SCOUT_DRIVER=database
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Storage Link
+```bash
+php artisan storage:link
+```
+
+### 5. Database Setup & Seed Data
+Execute database migrations and population seeders:
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 6. Administrative Panel Access
+The database seeder creates an initial administrator account:
+- **Admin URL**: `http://localhost:8000/admin`
+- **Email**: `helmy@helmyyunan.dev`
+- **Default Seeder Password**: Configured via seeder (`password` in local seed environment; change immediately in production)
+
+---
+
+## Frontend Development & Asset Compilation
+
+```bash
+# Start Vite development server with Hot Module Replacement
+npm run dev
+
+# Compile optimized production bundle
+npm run build
+```
+
+---
+
+## Production Optimization & Deployment Checklist
+
+### Production Environment Variables
+In your production `.env`:
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+
+# Cache drivers
+CACHE_STORE=database
+SESSION_DRIVER=database
+QUEUE_CONNECTION=database
+```
+
+### Production Optimizations
+Execute the framework cache commands before serving traffic:
+```bash
+# 1. Clear development caches
+php artisan optimize:clear
+
+# 2. Build production assets
+npm run build
+
+# 3. Cache configuration, routes, and blade views
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
+
+# 4. Optimize composer autoloading
+composer install --optimize-autoloader --no-dev
+```
+
+### Web Server Setup (Nginx)
+Ensure your Nginx configuration routes all traffic through `public/index.php`:
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+    root /var/www/portfolio/public;
+
+    index index.php;
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+---
+
+## Data Safety & Backup Strategy
+
+1. **Database Snapshots**:
+   ```bash
+   mysqldump -u root -p helmy_portfolio > backup_$(date +%F).sql
+   ```
+2. **Media Library Storage**:
+   Regularly archive the contents of `storage/app/public/` where uploaded project showcases, avatars, and certificate media reside.
+3. **Environment Security**:
+   Encrypt the environment file in CI/CD using Laravel's native encryption:
+   ```bash
+   php artisan env:encrypt --key=your-encryption-key
+   ```
+
+---
+
+## Common Artisan Commands
+
+```bash
+# Run automated tests
+php artisan test --compact
+
+# Code style formatting (Laravel Pint)
+vendor/bin/pint --format agent
+
+# Clear application cache
+php artisan cache:clear
+
+# Re-index Scout search records
+php artisan scout:import "App\Models\Project"
+php artisan scout:import "App\Models\Experience"
+php artisan scout:import "App\Models\Skill"
+php artisan scout:import "App\Models\Article"
+```
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the [MIT License](LICENSE).

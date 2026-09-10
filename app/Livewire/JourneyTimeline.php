@@ -6,20 +6,26 @@ use App\Models\Experience;
 use App\Models\ExperienceType;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class JourneyTimeline extends Component
 {
+    use WithPagination;
+
     public string $activeFilter = 'all';
 
     public bool $isPlaying = false;
 
     public int $currentIndex = 0;
 
+    public int $perPage = 8;
+
     public function setFilter(string $filter): void
     {
         $this->activeFilter = $filter;
         $this->isPlaying = false;
         $this->currentIndex = 0;
+        $this->resetPage();
     }
 
     public function togglePlay(): void
@@ -51,7 +57,7 @@ class JourneyTimeline extends Component
 
     protected function getExperiencesQuery()
     {
-        $query = Experience::with(['experienceType', 'organization', 'skills', 'projects', 'certificates', 'achievements', 'events'])
+        $query = Experience::with(['experienceType', 'organization', 'skills'])
             ->whereHas('experienceType', fn ($q) => $q->where('is_active', true))
             ->published()
             ->visible()
@@ -72,12 +78,12 @@ class JourneyTimeline extends Component
     public function render(): View
     {
         $types = ExperienceType::active()->ordered()->get();
-        $experiences = $this->getExperiencesQuery()->get();
+        $experiences = $this->getExperiencesQuery()->paginate($this->perPage);
 
         return view('livewire.journey-timeline', [
             'types' => $types,
             'experiences' => $experiences,
-            'totalCount' => $experiences->count(),
+            'totalCount' => $experiences->total(),
         ]);
     }
 }

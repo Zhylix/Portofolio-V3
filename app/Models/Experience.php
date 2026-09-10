@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 
 class Experience extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'experience_type_id',
@@ -87,6 +89,24 @@ class Experience extends Model
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class, 'article_experience');
+    }
+
+    public function seo(): MorphOne
+    {
+        return $this->morphOne(SeoMetadata::class, 'seomodel');
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (int) $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'role' => $this->role,
+            'summary' => $this->summary,
+            'description' => $this->description,
+            'contribution' => $this->contribution,
+        ];
     }
 
     public function scopePublished(Builder $query): Builder

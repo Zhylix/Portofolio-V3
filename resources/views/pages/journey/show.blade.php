@@ -1,4 +1,20 @@
-<x-layouts.app :title="$experience->title . ' — Journey Case Study'">
+@php
+    $metaDesc = $experience->seo?->meta_description ?? ($experience->summary ?: Str::limit(strip_tags($experience->description), 160));
+    $orgLogo = $experience->organization?->logo_url;
+    $breadcrumbs = [
+        ['name' => 'Home', 'url' => route('home')],
+        ['name' => 'Journey', 'url' => route('journey.index')],
+        ['name' => $experience->title, 'url' => route('journey.show', $experience->slug)],
+    ];
+@endphp
+
+<x-layouts.app 
+    :title="$experience->title . ' — Journey Case Study'"
+    :meta-description="$metaDesc"
+    :og-image="$orgLogo ?: asset('images/og-card.png')"
+    :breadcrumbs="$breadcrumbs"
+    og-type="article"
+>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Back Navigation -->
         <div class="mb-8">

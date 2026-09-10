@@ -18,9 +18,11 @@ class SocialLinkResource extends Resource
 {
     protected static ?string $model = SocialLink::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = 'SYSTEM';
+
     protected static ?string $navigationLabel = 'Social Links';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
 

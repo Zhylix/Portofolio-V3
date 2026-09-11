@@ -10,10 +10,16 @@ class ListSettings extends ListRecords
 {
     protected static string $resource = SettingResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Konfigurasi preferensi sistem dan parameter portfolio kamu.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Setting'),
         ];
     }
 }

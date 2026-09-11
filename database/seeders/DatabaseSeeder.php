@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Experience Types (All 20 Types)
+        // 3. Experience Types
         $experienceTypesData = [
             ExperienceTypeEnum::WORK->value => ['name' => 'Work Experience', 'icon' => 'briefcase', 'sort' => 1],
             ExperienceTypeEnum::INTERNSHIP->value => ['name' => 'Internship', 'icon' => 'academic-cap', 'sort' => 2],

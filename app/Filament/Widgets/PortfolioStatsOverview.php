@@ -3,10 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Achievement;
-use App\Models\Article;
 use App\Models\Certificate;
 use App\Models\ContactMessage;
-use App\Models\Experience;
+use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Skill;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -14,47 +13,42 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class PortfolioStatsOverview extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     protected function getStats(): array
     {
         $unreadMessages = ContactMessage::unread()->count();
 
         return [
-            Stat::make('Total Projects', (string) Project::count())
-                ->description(Project::featured()->count().' featured case studies')
-                ->descriptionIcon('heroicon-m-computer-desktop')
-                ->color('indigo'),
-
-            Stat::make('Experiences', (string) Experience::count())
-                ->description(Experience::published()->count().' public timeline milestones')
-                ->descriptionIcon('heroicon-m-briefcase')
-                ->color('success'),
-
-            Stat::make('Skills Matrix', (string) Skill::count())
-                ->description('Validated with evidence counts')
-                ->descriptionIcon('heroicon-m-sparkles')
+            Stat::make('PROJECTS', (string) Project::count())
+                ->description('Active projects yang sedang ditampilkan.')
+                ->descriptionIcon('heroicon-m-rectangle-stack')
                 ->color('primary'),
 
-            Stat::make('Certificates', (string) Certificate::count())
-                ->description('Verified cloud & backend credentials')
+            Stat::make('SKILLS', (string) Skill::count())
+                ->description('Technical stack & skills terdaftar.')
+                ->descriptionIcon('heroicon-m-code-bracket')
+                ->color('primary'),
+
+            Stat::make('CERTIFICATES', (string) Certificate::count())
+                ->description('Certificates yang sudah tersimpan.')
                 ->descriptionIcon('heroicon-m-shield-check')
-                ->color('info'),
+                ->color('primary'),
 
-            Stat::make('Achievements', (string) Achievement::count())
-                ->description('National hackathons & honors')
+            Stat::make('ACHIEVEMENTS', (string) Achievement::count())
+                ->description('Honors & kompetisi yang diraih.')
                 ->descriptionIcon('heroicon-m-trophy')
-                ->color('warning'),
+                ->color('primary'),
 
-            Stat::make('Articles', (string) Article::published()->count())
-                ->description('Published technical writings')
-                ->descriptionIcon('heroicon-m-document-text')
-                ->color('gray'),
-
-            Stat::make('Unread Inquiries', (string) $unreadMessages)
-                ->description($unreadMessages > 0 ? 'Action required on incoming messages' : 'Inbox is all caught up')
+            Stat::make('MESSAGES', (string) ContactMessage::count())
+                ->description($unreadMessages > 0 ? $unreadMessages.' inquiries baru belum dibaca' : 'Inbox kamu sudah rapi & clear')
                 ->descriptionIcon('heroicon-m-envelope')
-                ->color($unreadMessages > 0 ? 'danger' : 'success'),
+                ->color($unreadMessages > 0 ? 'danger' : 'primary'),
+
+            Stat::make('ORGANIZATIONS', (string) Organization::count())
+                ->description('Affiliations & riwayat institusi.')
+                ->descriptionIcon('heroicon-m-building-office-2')
+                ->color('primary'),
         ];
     }
 }

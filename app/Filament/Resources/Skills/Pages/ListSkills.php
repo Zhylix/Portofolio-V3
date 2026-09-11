@@ -10,10 +10,16 @@ class ListSkills extends ListRecords
 {
     protected static string $resource = SkillResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Kelola skill matrix dan technical stack portfolio kamu.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Skill'),
         ];
     }
 }

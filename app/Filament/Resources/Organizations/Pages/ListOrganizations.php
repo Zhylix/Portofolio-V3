@@ -10,10 +10,16 @@ class ListOrganizations extends ListRecords
 {
     protected static string $resource = OrganizationResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Kelola riwayat organisasi, komunitas, dan afiliasi kamu.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Organization'),
         ];
     }
 }

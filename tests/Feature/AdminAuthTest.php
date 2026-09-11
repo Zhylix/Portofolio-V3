@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Pages\Auth\Login;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class AdminAuthTest extends TestCase
@@ -89,5 +91,30 @@ class AdminAuthTest extends TestCase
             $response = $this->actingAs($this->user)->get($route);
             $response->assertStatus(200);
         }
+    }
+
+    public function test_login_page_renders_premium_branding_and_technical_metadata(): void
+    {
+        $response = $this->get('/admin/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('ZEPHYR');
+        $response->assertSee('SYSTEM');
+        $response->assertSee('Manage the things behind the portfolio.');
+        $response->assertSee('PORTFOLIO CMS');
+        $response->assertSee('ONLINE');
+        $response->assertSee('Welcome back.');
+        $response->assertSee('Sign In');
+    }
+
+    public function test_login_failure_displays_custom_subtle_error(): void
+    {
+        Livewire::test(Login::class)
+            ->fillForm([
+                'email' => 'wrong@example.com',
+                'password' => 'invalid-password',
+            ])
+            ->call('authenticate')
+            ->assertHasErrors(['data.email' => 'Invalid credentials. Email atau password yang kamu masukkan tidak sesuai. Please try again.']);
     }
 }

@@ -10,10 +10,16 @@ class ListEvents extends ListRecords
 {
     protected static string $resource = EventResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Kelola konferensi, seminar, dan workshop yang pernah kamu ikuti.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Event'),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Certificates\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -41,12 +42,23 @@ class CertificatesTable
                 TernaryFilter::make('featured')
                     ->label('Featured Only'),
             ])
+            ->emptyStateHeading('No Certificates Yet')
+            ->emptyStateDescription('Belum ada certificate yang tersimpan. Start by adding your verified credentials.')
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make()
+                    ->modalHeading('Delete Certificate?')
+                    ->modalDescription('Certificate ini akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Delete')
+                    ->modalCancelActionLabel('Cancel'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->modalHeading('Delete Selected Certificates?')
+                        ->modalDescription('Certificate yang dipilih akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Delete')
+                        ->modalCancelActionLabel('Cancel'),
                 ]),
             ]);
     }

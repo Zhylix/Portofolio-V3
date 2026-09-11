@@ -9,8 +9,12 @@ use App\Filament\Resources\Experiences\Pages\CreateExperience;
 use App\Filament\Resources\Projects\Pages\CreateProject;
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Skills\Pages\CreateSkill;
+use App\Filament\Widgets\ContentHealthWidget;
+use App\Filament\Widgets\DashboardHeroWidget;
 use App\Filament\Widgets\LatestContactMessagesWidget;
 use App\Filament\Widgets\PortfolioStatsOverview;
+use App\Filament\Widgets\RecentActivityWidget;
+use App\Filament\Widgets\RecentProjectsWidget;
 use App\Models\ContactMessage;
 use App\Models\ExperienceType;
 use App\Models\Project;
@@ -170,5 +174,21 @@ class AdminResourceTest extends TestCase
         Livewire::test(LatestContactMessagesWidget::class)
             ->assertSuccessful()
             ->assertSee('Alice Recruiter');
+
+        Livewire::test(DashboardHeroWidget::class)
+            ->assertSuccessful()
+            ->assertSee('Welcome back');
+
+        Livewire::test(RecentProjectsWidget::class)
+            ->assertSuccessful()
+            ->assertSee('Recent Projects');
+
+        Livewire::test(ContentHealthWidget::class)
+            ->assertSuccessful()
+            ->assertSee('Content Health');
+
+        Livewire::test(RecentActivityWidget::class)
+            ->assertSuccessful()
+            ->assertSee('Recent Activity');
     }
 }

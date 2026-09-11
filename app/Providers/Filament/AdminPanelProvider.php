@@ -2,13 +2,18 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Dashboard;
+use App\Filament\Widgets\ContentHealthWidget;
+use App\Filament\Widgets\DashboardHeroWidget;
 use App\Filament\Widgets\LatestContactMessagesWidget;
 use App\Filament\Widgets\PortfolioStatsOverview;
+use App\Filament\Widgets\RecentActivityWidget;
+use App\Filament\Widgets\RecentProjectsWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
@@ -28,8 +33,13 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(Login::class)
             ->brandName('ZEPHYR ADMIN')
+            ->navigationGroups([
+                'PORTFOLIO',
+                'BACKGROUND',
+                'SYSTEM',
+            ])
             ->colors([
                 'primary' => [
                     50 => '#fdf6f0',
@@ -60,46 +70,192 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->darkMode(true, isForced: true)
             ->renderHook(
+                PanelsRenderHook::HEAD_START,
+                fn (): string => Blade::render('
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+                    @vite("resources/css/app.css")
+                ')
+            )
+            ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn (): string => Blade::render('
                     <style>
                         :root, .dark {
                             --brand-bg: #080808;
-                            --brand-charcoal: #0E0D0C;
-                            --brand-surface: #151311;
+                            --brand-sidebar: #0B0A09;
+                            --brand-surface: #0E0D0C;
+                            --brand-card: #151311;
+                            --brand-card-hover: #1A1714;
                             --brand-border: #2A2520;
                             --brand-orange: #C45A19;
-                            --brand-orange-light: #E47A2E;
+                            --brand-orange-hover: #E47A2E;
                             --brand-text: #F5F1EA;
+                            --brand-muted: #9E958B;
+                            --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+                            --font-heading: "Space Grotesk", sans-serif;
+                            --font-mono: "JetBrains Mono", monospace;
                         }
-                        body, .fi-body {
+
+                        /* Global base & typography */
+                        body, .fi-body, .fi-layout {
                             background-color: #080808 !important;
                             color: #F5F1EA !important;
+                            font-family: var(--font-sans) !important;
+                            overflow-x: hidden !important;
                         }
+
+                        h1, h2, h3, .fi-header-heading, .fi-section-header-heading, .fi-ta-header-heading {
+                            font-family: var(--font-heading) !important;
+                            color: #F5F1EA !important;
+                            letter-spacing: -0.02em !important;
+                        }
+
+                        /* Sidebar styling */
                         .fi-sidebar, aside.fi-sidebar {
-                            background-color: #0E0D0C !important;
-                            border-right-color: #2A2520 !important;
+                            background-color: #0B0A09 !important;
+                            border-right: 1px solid #2A2520 !important;
                         }
-                        .fi-topbar, header.fi-topbar {
-                            background-color: #0E0D0C !important;
-                            border-bottom-color: #2A2520 !important;
+
+                        .fi-sidebar-header {
+                            border-bottom: 1px solid #2A2520 !important;
                         }
-                        .fi-section, .fi-widget, .fi-ta-ctn, .fi-modal-window {
-                            background-color: #151311 !important;
-                            border-color: #2A2520 !important;
-                        }
+
                         .fi-sidebar-group-label {
-                            letter-spacing: 0.08em;
+                            font-family: var(--font-mono) !important;
+                            font-size: 0.65rem !important;
                             font-weight: 700 !important;
-                            font-size: 0.7rem !important;
-                            color: #C45A19 !important;
+                            letter-spacing: 0.1em !important;
+                            color: #9E958B !important;
+                            text-transform: uppercase !important;
                         }
-                        .fi-sidebar-item-active .fi-sidebar-item-button {
-                            background-color: #1E1A17 !important;
-                            color: #E47A2E !important;
+
+                        .fi-sidebar-item-button {
+                            color: #9E958B !important;
+                            transition: all 0.15s ease !important;
+                            border-radius: 0.5rem !important;
                         }
+
                         .fi-sidebar-item-button:hover {
                             background-color: #151311 !important;
+                            color: #F5F1EA !important;
+                        }
+
+                        .fi-sidebar-item-active .fi-sidebar-item-button {
+                            background-color: rgba(196, 90, 25, 0.12) !important;
+                            color: #F5F1EA !important;
+                            border-left: 3px solid #C45A19 !important;
+                            border-radius: 0 0.5rem 0.5rem 0 !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .fi-sidebar-item-active .fi-sidebar-item-icon {
+                            color: #E47A2E !important;
+                        }
+
+                        /* Topbar styling */
+                        .fi-topbar, header.fi-topbar {
+                            background-color: #0E0D0C !important;
+                            border-bottom: 1px solid #2A2520 !important;
+                        }
+
+                        /* Sections & Cards */
+                        .fi-section, .fi-widget, .fi-modal-window {
+                            background-color: #151311 !important;
+                            border-color: #2A2520 !important;
+                            border-radius: 1rem !important;
+                        }
+
+                        /* Stats cards */
+                        .fi-wi-stats-overview-stat {
+                            background-color: #151311 !important;
+                            border: 1px solid #2A2520 !important;
+                            border-radius: 1rem !important;
+                            transition: all 0.2s ease !important;
+                        }
+
+                        .fi-wi-stats-overview-stat:hover {
+                            background-color: #1A1714 !important;
+                            border-color: #3D352E !important;
+                        }
+
+                        .fi-wi-stats-overview-stat-label {
+                            font-family: var(--font-mono) !important;
+                            font-size: 0.7rem !important;
+                            letter-spacing: 0.08em !important;
+                            color: #9E958B !important;
+                            text-transform: uppercase !important;
+                        }
+
+                        .fi-wi-stats-overview-stat-value {
+                            font-family: var(--font-heading) !important;
+                            font-weight: 700 !important;
+                            color: #F5F1EA !important;
+                        }
+
+                        /* Tables */
+                        .fi-ta-ctn {
+                            background-color: #151311 !important;
+                            border: 1px solid #2A2520 !important;
+                            border-radius: 1rem !important;
+                            overflow: hidden !important;
+                        }
+
+                        .fi-ta-header-cell {
+                            background-color: #0E0D0C !important;
+                            font-family: var(--font-mono) !important;
+                            font-size: 0.72rem !important;
+                            letter-spacing: 0.05em !important;
+                            color: #9E958B !important;
+                            text-transform: uppercase !important;
+                            border-bottom: 1px solid #2A2520 !important;
+                        }
+
+                        .fi-ta-row {
+                            border-color: #2A2520 !important;
+                            transition: background-color 0.15s ease !important;
+                        }
+
+                        .fi-ta-row:hover {
+                            background-color: #1A1714 !important;
+                        }
+
+                        /* Inputs & form elements */
+                        .fi-input-wrp {
+                            background-color: #0E0D0C !important;
+                            border-color: #2A2520 !important;
+                            border-radius: 0.625rem !important;
+                            color: #F5F1EA !important;
+                        }
+
+                        .fi-input-wrp:focus-within {
+                            border-color: #C45A19 !important;
+                            box-shadow: 0 0 0 1px #C45A19 !important;
+                        }
+
+                        /* Buttons */
+                        .fi-btn-primary, button[type="submit"].fi-btn {
+                            background-color: #C45A19 !important;
+                            color: #F5F1EA !important;
+                            font-family: var(--font-mono) !important;
+                            font-size: 0.8rem !important;
+                            font-weight: 600 !important;
+                            letter-spacing: 0.04em !important;
+                            border-radius: 0.625rem !important;
+                            transition: all 0.2s ease !important;
+                        }
+
+                        .fi-btn-primary:hover, button[type="submit"].fi-btn:hover {
+                            background-color: #E47A2E !important;
+                            box-shadow: 0 0 16px rgba(196, 90, 25, 0.35) !important;
+                        }
+
+                        /* Badges */
+                        .fi-badge {
+                            font-family: var(--font-mono) !important;
+                            font-size: 0.68rem !important;
+                            letter-spacing: 0.05em !important;
                         }
                     </style>
                 ')
@@ -111,7 +267,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                DashboardHeroWidget::class,
                 PortfolioStatsOverview::class,
+                RecentProjectsWidget::class,
+                ContentHealthWidget::class,
+                RecentActivityWidget::class,
                 LatestContactMessagesWidget::class,
             ])
             ->middleware([

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Projects\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -56,12 +57,23 @@ class ProjectsTable
                 TernaryFilter::make('featured')
                     ->label('Featured Only'),
             ])
+            ->emptyStateHeading('No Projects Yet')
+            ->emptyStateDescription('Belum ada project yang ditambahkan. Start by creating your first project.')
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make()
+                    ->modalHeading('Delete Project?')
+                    ->modalDescription('Project ini akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Delete')
+                    ->modalCancelActionLabel('Cancel'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->modalHeading('Delete Selected Projects?')
+                        ->modalDescription('Project yang dipilih akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Delete')
+                        ->modalCancelActionLabel('Cancel'),
                 ]),
             ]);
     }

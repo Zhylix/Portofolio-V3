@@ -10,10 +10,16 @@ class ListSeoMetadata extends ListRecords
 {
     protected static string $resource = SeoMetadataResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Kelola meta title, description, dan Open Graph untuk SEO portfolio.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add SEO Metadata'),
         ];
     }
 }

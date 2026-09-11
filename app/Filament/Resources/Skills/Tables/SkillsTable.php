@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Skills\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -51,12 +52,23 @@ class SkillsTable
                 TernaryFilter::make('featured')
                     ->label('Featured Only'),
             ])
+            ->emptyStateHeading('No Skills Yet')
+            ->emptyStateDescription('Belum ada skill yang ditambahkan. Start by defining your core competencies.')
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make()
+                    ->modalHeading('Delete Skill?')
+                    ->modalDescription('Skill ini akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Delete')
+                    ->modalCancelActionLabel('Cancel'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->modalHeading('Delete Selected Skills?')
+                        ->modalDescription('Skill yang dipilih akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Delete')
+                        ->modalCancelActionLabel('Cancel'),
                 ]),
             ]);
     }

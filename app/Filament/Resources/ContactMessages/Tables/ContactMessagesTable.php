@@ -59,6 +59,8 @@ class ContactMessagesTable
                         'archived' => 'Archived',
                     ]),
             ])
+            ->emptyStateHeading('No Messages Yet')
+            ->emptyStateDescription('Belum ada inquiry yang masuk dari contact form.')
             ->recordActions([
                 Action::make('markAsRead')
                     ->label('Mark Read')
@@ -67,7 +69,7 @@ class ContactMessagesTable
                     ->visible(fn (ContactMessage $record) => ($record->status instanceof ContactMessageStatus ? $record->status->value : $record->status) === 'unread')
                     ->action(function (ContactMessage $record) {
                         $record->update(['status' => ContactMessageStatus::READ, 'read_at' => now()]);
-                        Notification::make()->title('Message marked as read')->success()->send();
+                        Notification::make()->title('Success')->body('Pesan ditandai sebagai sudah dibaca.')->success()->send();
                     }),
                 Action::make('markAsUnread')
                     ->label('Mark Unread')
@@ -76,7 +78,7 @@ class ContactMessagesTable
                     ->visible(fn (ContactMessage $record) => ($record->status instanceof ContactMessageStatus ? $record->status->value : $record->status) === 'read')
                     ->action(function (ContactMessage $record) {
                         $record->update(['status' => ContactMessageStatus::UNREAD]);
-                        Notification::make()->title('Message marked as unread')->warning()->send();
+                        Notification::make()->title('Success')->body('Pesan ditandai belum dibaca.')->warning()->send();
                     }),
                 Action::make('archive')
                     ->label('Archive')
@@ -85,10 +87,14 @@ class ContactMessagesTable
                     ->visible(fn (ContactMessage $record) => ($record->status instanceof ContactMessageStatus ? $record->status->value : $record->status) !== 'archived')
                     ->action(function (ContactMessage $record) {
                         $record->update(['status' => ContactMessageStatus::ARCHIVED]);
-                        Notification::make()->title('Message archived')->send();
+                        Notification::make()->title('Success')->body('Pesan berhasil diarsipkan.')->send();
                     }),
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->modalHeading('Delete Message?')
+                    ->modalDescription('Pesan ini akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Delete')
+                    ->modalCancelActionLabel('Cancel'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -100,7 +106,11 @@ class ContactMessagesTable
                         ->label('Archive')
                         ->icon('heroicon-o-archive-box')
                         ->action(fn (Collection $records) => $records->each->update(['status' => ContactMessageStatus::ARCHIVED])),
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->modalHeading('Delete Selected Messages?')
+                        ->modalDescription('Pesan yang dipilih akan dihapus permanently. Action ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Delete')
+                        ->modalCancelActionLabel('Cancel'),
                 ]),
             ]);
     }

@@ -10,10 +10,16 @@ class ListCertificates extends ListRecords
 {
     protected static string $resource = CertificateResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Upload dan manage certificate yang sudah kamu dapatkan.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Certificate'),
         ];
     }
 }

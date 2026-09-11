@@ -10,10 +10,16 @@ class ListProjects extends ListRecords
 {
     protected static string $resource = ProjectResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Manage semua project portfolio kamu.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Project'),
         ];
     }
 }

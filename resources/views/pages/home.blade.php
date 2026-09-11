@@ -39,7 +39,7 @@
 
                 <!-- Headline -->
                 <p class="text-xl sm:text-2xl font-heading font-semibold text-[#E47A2E] leading-snug max-w-2xl">
-                    WEB DEVELOPER BUILDING DIGITAL EXPERIENCES THROUGH CODE & CREATIVITY
+                    Web Developer membangun dengan Qualitas yang Hebat
                 </p>
 
                 <!-- Bio Summary -->

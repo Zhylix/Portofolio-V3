@@ -10,10 +10,16 @@ class ListProfiles extends ListRecords
 {
     protected static string $resource = ProfileResource::class;
 
+    public function getSubheading(): ?string
+    {
+        return 'Update informasi personal dan professional kamu.';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('+ Add Profile'),
         ];
     }
 }

@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: porto-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:10000"
+    environment:
+      APP_NAME: "Helmy Yunan Portfolio"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:${APP_PORT:-8000}"
+      APP_KEY: "${APP_KEY:-base64:randomkeyhere}"
+      LOG_CHANNEL: stderr
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: porto
+      DB_USERNAME: porto_user
+      DB_PASSWORD: porto_password
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: sync
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - storage_data:/app/storage/app/public
+
+  mysql:
+    image: mysql:8.4
+    container_name: porto-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: porto
+      MYSQL_USER: porto_user
+      MYSQL_PASSWORD: porto_password
+      MYSQL_ROOT_PASSWORD: root_secret_password
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_secret_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+  storage_data:
